@@ -12,7 +12,6 @@ import {
     Tab,
     Tabs,
     Toolbar,
-    Typography,
     useMediaQuery,
 } from '@mui/material'
 import {useTheme} from '@mui/material/styles'
@@ -51,13 +50,6 @@ function App() {
                                     alt="Airward logo"
                                     sx={{height: 32, width: 'auto'}}
                                 />
-                                <Typography
-                                    variant="h6"
-                                    component="div"
-                                    sx={{fontWeight: 800, color: '#1f2937'}}
-                                >
-                                    Airward
-                                </Typography>
                             </Box>
 
                             <Tabs
@@ -82,7 +74,6 @@ function App() {
 
             <header className="shell__header">
                 <div className="header__meta">
-                    <span className="brand">Airward</span>
                     <span className="pill">Practice</span>
                 </div>
                 <p className="header__subtitle">
