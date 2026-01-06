@@ -1,34 +1,70 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import MenuBookRounded from '@mui/icons-material/MenuBookRounded'
+import HeadphonesRounded from '@mui/icons-material/HeadphonesRounded'
+import MicRounded from '@mui/icons-material/MicRounded'
+import InsightsRounded from '@mui/icons-material/InsightsRounded'
+import { useState, type ReactElement } from 'react'
+
 import './App.css'
 
+type NavKey = 'library' | 'listen' | 'speak' | 'stats'
+
+const navItems: Array<{ key: NavKey; label: string; icon: ReactElement }> = [
+  { key: 'library', label: 'Library', icon: <MenuBookRounded /> },
+  { key: 'listen', label: 'Listen', icon: <HeadphonesRounded /> },
+  { key: 'speak', label: 'Speak', icon: <MicRounded /> },
+  { key: 'stats', label: 'Stats', icon: <InsightsRounded /> },
+]
+
 function App() {
-  const [count, setCount] = useState(0)
+  const [active, setActive] = useState<NavKey>('listen')
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
+    <div className="shell">
+      <header className="shell__header">
+        <div className="header__meta">
+          <span className="brand">Airward</span>
+          <span className="pill">Practice</span>
+        </div>
+        <p className="header__subtitle">
+          Navigate between learning tools with the bottom bar.
         </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+      </header>
+
+      <main className="shell__main">
+        <div className="card card--ghost">
+          <p className="card__eyebrow">Active view</p>
+          <h2 className="card__title">
+            {navItems.find((item) => item.key === active)?.label}
+          </h2>
+          <p className="card__body">
+            This placeholder content shows which section is selected in the
+            bottom navigation. On mobile and tablet, the navigation is pinned to
+            the bottom with elevated styling.
+          </p>
+        </div>
+      </main>
+
+      <nav className="bottom-nav">
+        {navItems.map((item) => {
+          const isActive = item.key === active
+          return (
+            <button
+              key={item.key}
+              className={`bottom-nav__item ${isActive ? 'is-active' : ''}`}
+              type="button"
+              aria-pressed={isActive}
+              onClick={() => setActive(item.key)}
+            >
+              <span className="bottom-nav__icon" aria-hidden>
+                {item.icon}
+              </span>
+              <span className="bottom-nav__label">{item.label}</span>
+              <span className="bottom-nav__ripple" aria-hidden />
+            </button>
+          )
+        })}
+      </nav>
+    </div>
   )
 }
 
