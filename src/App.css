@@ -10,6 +10,11 @@
   margin: 0 auto;
 }
 
+.shell--desktop {
+  max-width: 1080px;
+  padding: 120px 32px 80px;
+}
+
 .shell__header {
   display: flex;
   flex-direction: column;
@@ -94,6 +99,10 @@
 @media (min-width: 768px) {
   .shell {
     padding: 40px 32px 140px;
+  }
+
+  .shell--desktop {
+    padding: 140px 48px 96px;
   }
 
   .card__title {
