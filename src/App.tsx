@@ -2,6 +2,8 @@ import MenuBookRounded from '@mui/icons-material/MenuBookRounded'
 import HeadphonesRounded from '@mui/icons-material/HeadphonesRounded'
 import MicRounded from '@mui/icons-material/MicRounded'
 import InsightsRounded from '@mui/icons-material/InsightsRounded'
+import BottomNavigation from '@mui/material/BottomNavigation'
+import BottomNavigationAction from '@mui/material/BottomNavigationAction'
 import { useState, type ReactElement } from 'react'
 
 import './App.css'
@@ -44,26 +46,20 @@ function App() {
         </div>
       </main>
 
-      <nav className="bottom-nav">
-        {navItems.map((item) => {
-          const isActive = item.key === active
-          return (
-            <button
-              key={item.key}
-              className={`bottom-nav__item ${isActive ? 'is-active' : ''}`}
-              type="button"
-              aria-pressed={isActive}
-              onClick={() => setActive(item.key)}
-            >
-              <span className="bottom-nav__icon" aria-hidden>
-                {item.icon}
-              </span>
-              <span className="bottom-nav__label">{item.label}</span>
-              <span className="bottom-nav__ripple" aria-hidden />
-            </button>
-          )
-        })}
-      </nav>
+      <BottomNavigation
+        showLabels
+        value={active}
+        onChange={(_, newValue) => setActive(newValue)}
+      >
+        {navItems.map((item) => (
+          <BottomNavigationAction
+            key={item.key}
+            label={item.label}
+            icon={item.icon}
+            value={item.key}
+          />
+        ))}
+      </BottomNavigation>
     </div>
   )
 }
