@@ -27,6 +27,17 @@ const navItems: Array<{ key: NavKey; label: string; icon: ReactElement }> = [
     {key: 'stats', label: 'Stats', icon: <InsightsRounded/>},
 ]
 
+function LogoBox({ height = 32 }) {
+    return (
+        <Box
+            component="img"
+            src={logo}
+            alt="Airward logo"
+            sx={{ height, width: 'auto' }}
+        />
+    );
+}
+
 function App() {
     const theme = useTheme()
     const isDesktop = useMediaQuery(theme.breakpoints.up('md'))
@@ -97,31 +108,39 @@ function App() {
             </main>
 
             {!isDesktop && (
-                <Paper
-                    sx={{
-                        position: 'fixed',
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        zIndex: (muiTheme) => muiTheme.zIndex.appBar,
-                    }}
-                    elevation={8}
-                >
-                    <BottomNavigation
-                        showLabels
-                        value={active}
-                        onChange={(_, newValue) => setActive(newValue as NavKey)}
+                <>
+                    <AppBar position="fixed" elevation={4}>
+                        <Toolbar>
+                            <LogoBox height={28} />
+                        </Toolbar>
+                    </AppBar>
+
+                    <Paper
+                        sx={{
+                            position: 'fixed',
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            zIndex: (muiTheme) => muiTheme.zIndex.appBar,
+                        }}
+                        elevation={8}
                     >
-                        {navItems.map((item) => (
-                            <BottomNavigationAction
-                                key={item.key}
-                                label={item.label}
-                                icon={item.icon}
-                                value={item.key}
-                            />
-                        ))}
-                    </BottomNavigation>
-                </Paper>
+                        <BottomNavigation
+                            showLabels
+                            value={active}
+                            onChange={(_, newValue) => setActive(newValue as NavKey)}
+                        >
+                            {navItems.map((item) => (
+                                <BottomNavigationAction
+                                    key={item.key}
+                                    label={item.label}
+                                    icon={item.icon}
+                                    value={item.key}
+                                />
+                            ))}
+                        </BottomNavigation>
+                    </Paper>
+                </>
             )}
         </div>
     )
