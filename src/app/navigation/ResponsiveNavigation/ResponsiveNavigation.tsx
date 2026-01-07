@@ -9,7 +9,7 @@ import {
     Tabs,
     Toolbar,
 } from '@mui/material'
-import {BrandLogo} from "../../../components/BrandLogo/BrandLogo.tsx";
+import {BrandLogo} from "../../../components/brand-logo/BrandLogo.tsx";
 
 type NavKey = 'library' | 'listen' | 'speak' | 'stats'
 

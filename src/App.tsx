@@ -3,10 +3,11 @@ import HeadphonesRounded from '@mui/icons-material/HeadphonesRounded'
 import MicRounded from '@mui/icons-material/MicRounded'
 import InsightsRounded from '@mui/icons-material/InsightsRounded'
 import {type ReactElement, useState} from 'react'
-import {ThemeProvider, useMediaQuery,} from '@mui/material'
+import {Box, ThemeProvider, useMediaQuery,} from '@mui/material'
 import {theme} from './theme';
 import './App.css'
 import {ResponsiveNavigation} from "./app/navigation/ResponsiveNavigation/ResponsiveNavigation.tsx";
+import {VowelDetailsCard} from "./components/vowel-details/VowelDetailsCard.tsx";
 
 type NavKey = 'library' | 'listen' | 'speak' | 'stats'
 
@@ -24,18 +25,17 @@ function App() {
     return (
         <ThemeProvider theme={theme}>
             <ResponsiveNavigation isDesktop={isDesktop} items={navItems} value={active} onChange={setActive}>
-                <h2 style={{
+                {/*<h2 style={{
                     margin: '8px',
                     fontSize: '24px',
                     color: '#0f172a'
                 }}>
                     {navItems.find((item) => item.key === active)?.label}
-                </h2>
+                </h2>*/}
 
-                <span>
-                Navigate between learning tools with the top bar on desktop or the bottom bar on mobile and
-                tablet.
-                </span>
+                <Box className={isDesktop ? 'shell shell--desktop' : 'shell'}>
+                    <VowelDetailsCard/>
+                </Box>
             </ResponsiveNavigation>
         </ThemeProvider>
     )
