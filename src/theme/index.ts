@@ -81,5 +81,21 @@ export const theme = createTheme({
             },
         },
 
+        MuiChip: {
+            styleOverrides: {
+                root: ({ theme }) => ({
+                    color: theme.palette.secondary.contrastText,
+                }),
+
+                outlined: ({ theme }) => ({
+                    color: theme.palette.secondary.contrastText,
+                    borderColor: theme.palette.divider,
+                }),
+
+                filled: ({ theme }) => ({
+                    color: theme.palette.common.white,
+                }),
+            },
+        },
     },
 });
