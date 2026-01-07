@@ -15,7 +15,7 @@ export const theme = createTheme({
             paper: '#ffffff'
         },
         text: {
-            primary: '#fff', // #0f172a
+            primary: '#0f172a', // '#fff'
             secondary: '#facc15', // #475569
         },
         divider: '#e2e8f0',
@@ -81,5 +81,21 @@ export const theme = createTheme({
             },
         },
 
+        MuiChip: {
+            styleOverrides: {
+                root: ({ theme }) => ({
+                    color: theme.palette.secondary.contrastText,
+                }),
+
+                outlined: ({ theme }) => ({
+                    color: theme.palette.secondary.contrastText,
+                    borderColor: theme.palette.divider,
+                }),
+
+                filled: ({ theme }) => ({
+                    color: theme.palette.common.white,
+                }),
+            },
+        },
     },
 });
