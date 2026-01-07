@@ -7,6 +7,11 @@
     "module": "ESNext",
     "types": ["vite/client"],
     "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@mui/icons-material/*": ["src/mui-icons-material/*"],
+      "@mui/material/*": ["src/mui-material/*"]
+    },
 
     /* Bundler mode */
     "moduleResolution": "bundler",

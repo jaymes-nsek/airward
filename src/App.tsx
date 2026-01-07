@@ -1,35 +1,44 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import MenuBookRounded from '@mui/icons-material/MenuBookRounded'
+import HeadphonesRounded from '@mui/icons-material/HeadphonesRounded'
+import MicRounded from '@mui/icons-material/MicRounded'
+import InsightsRounded from '@mui/icons-material/InsightsRounded'
+import {type ReactElement, useState} from 'react'
+import {ThemeProvider, useMediaQuery,} from '@mui/material'
+import {theme} from './theme';
 import './App.css'
+import {ResponsiveNavigation} from "./app/navigation/ResponsiveNavigation/ResponsiveNavigation.tsx";
+
+type NavKey = 'library' | 'listen' | 'speak' | 'stats'
+
+const navItems: Array<{ key: NavKey; label: string; icon: ReactElement }> = [
+    {key: 'library', label: 'Library', icon: <MenuBookRounded/>},
+    {key: 'listen', label: 'Listen', icon: <HeadphonesRounded/>},
+    {key: 'speak', label: 'Speak', icon: <MicRounded/>},
+    {key: 'stats', label: 'Stats', icon: <InsightsRounded/>},
+]
 
 function App() {
-  const [count, setCount] = useState(0)
+    const isDesktop = useMediaQuery(theme.breakpoints.up('md'))
+    const [active, setActive] = useState<NavKey>('listen')
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    return (
+        <ThemeProvider theme={theme}>
+            <ResponsiveNavigation isDesktop={isDesktop} items={navItems} value={active} onChange={setActive}>
+                <h2 style={{
+                    margin: '8px',
+                    fontSize: '24px',
+                    color: '#0f172a'
+                }}>
+                    {navItems.find((item) => item.key === active)?.label}
+                </h2>
+
+                <span>
+                Navigate between learning tools with the top bar on desktop or the bottom bar on mobile and
+                tablet.
+                </span>
+            </ResponsiveNavigation>
+        </ThemeProvider>
+    )
 }
 
 export default App

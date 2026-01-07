@@ -1,0 +1,122 @@
+import type {ReactNode} from 'react';
+import {
+    AppBar,
+    BottomNavigation,
+    BottomNavigationAction,
+    Box,
+    Paper,
+    Tab,
+    Tabs,
+    Toolbar,
+} from '@mui/material'
+import {BrandLogo} from "../../../components/BrandLogo/BrandLogo.tsx";
+
+type NavKey = 'library' | 'listen' | 'speak' | 'stats'
+
+type ResponsiveNavigationItem = {
+    key: NavKey
+    label: string
+    icon: React.ReactElement
+}
+
+type ResponsiveNavigationProps = {
+    isDesktop: boolean
+    items: ResponsiveNavigationItem[]
+    value: NavKey
+    onChange: (key: NavKey) => void
+    children: ReactNode
+}
+
+const APP_BAR_HEIGHT = 72
+const MOBILE_APP_BAR_HEIGHT = 64 // MUI default toolbar height on mobile (typically 56, but safe to be explicit)
+const BOTTOM_NAV_HEIGHT = 56      // MUI BottomNavigation default height
+
+export function ResponsiveNavigation({
+                                         isDesktop,
+                                         items,
+                                         value,
+                                         onChange,
+                                         children,
+                                     }: ResponsiveNavigationProps) {
+    if (isDesktop) {
+        return (
+            <>
+                <AppBar position="fixed" elevation={1}>
+                    <Toolbar sx={{gap: 3, px: {xs: 2, lg: 4}, minHeight: APP_BAR_HEIGHT}}>
+                        <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5}}>
+                            <BrandLogo/>
+                        </Box>
+
+                        <Tabs
+                            value={value}
+                            onChange={(_, newValue) => onChange(newValue as NavKey)}
+                            sx={{minHeight: APP_BAR_HEIGHT}}
+                        >
+                            {items.map((item) => (
+                                <Tab key={item.key} label={item.label} value={item.key}/>
+                            ))}
+                        </Tabs>
+                    </Toolbar>
+                </AppBar>
+
+                <Box
+                    component="main"
+                    sx={{
+                        pt: `${APP_BAR_HEIGHT}px`, // offset for fixed AppBar
+                        px: {xs: 2, lg: 4},
+                    }}
+                >
+                    {children}
+                </Box>
+            </>
+        )
+    }
+
+    return (
+        <>
+            <AppBar position="fixed" elevation={4}>
+                <Toolbar sx={{minHeight: MOBILE_APP_BAR_HEIGHT}}>
+                    <BrandLogo height={28}/>
+                </Toolbar>
+            </AppBar>
+
+            <Box
+                component="main"
+                sx={{
+                    pt: `${MOBILE_APP_BAR_HEIGHT}px`, // space for top AppBar
+                    pb: `${BOTTOM_NAV_HEIGHT}px`,     // space for bottom nav
+                    px: 2,
+                }}
+            >
+                {children}
+            </Box>
+
+            <Paper
+                sx={{
+                    position: 'fixed',
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    zIndex: (muiTheme) => muiTheme.zIndex.appBar,
+                }}
+                elevation={8}
+            >
+                <BottomNavigation
+                    showLabels
+                    value={value}
+                    onChange={(_, newValue) => onChange(newValue as NavKey)}
+                    sx={{height: BOTTOM_NAV_HEIGHT}}
+                >
+                    {items.map((item) => (
+                        <BottomNavigationAction
+                            key={item.key}
+                            label={item.label}
+                            icon={item.icon}
+                            value={item.key}
+                        />
+                    ))}
+                </BottomNavigation>
+            </Paper>
+        </>
+    )
+}
