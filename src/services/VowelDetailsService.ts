@@ -1,22 +1,7 @@
 import {type Observable} from 'rxjs'
 import {BaseService} from "./BaseService.ts";
+import type {VowelDetails} from "../components/vowel-details/VowelDetails.types.ts";
 
-export type PronunciationDialects = 'BrE' | 'AmE'
-
-export type VowelExample = {
-    word: string
-    pronunciations: Array<{
-        dialect: PronunciationDialects
-        ipa: string
-    }>
-}
-
-export type VowelDetails = {
-    symbol: string
-    keyword: string
-    isFavorite: boolean
-    examples: VowelExample[]
-}
 
 const DUMMY_VOWEL_DETAILS: VowelDetails = {
     symbol: '/ɜː/',

@@ -1,11 +1,18 @@
-import {useEffect, useState} from 'react'
+import {
+    ChevronRightRounded,
+    ExpandMoreRounded,
+    PlayArrowRounded,
+    ReplayRounded,
+    SlowMotionVideoRounded,
+    StarBorderRounded,
+    StarRounded
+} from "@mui/icons-material";
 import {
     Accordion,
     AccordionDetails,
     AccordionSummary,
     Box,
     Button,
-    Card,
     CardContent,
     CardHeader,
     Chip,
@@ -13,31 +20,9 @@ import {
     IconButton,
     Skeleton,
     Stack,
-    Typography,
-} from '@mui/material'
-import PlayArrowRounded from '@mui/icons-material/PlayArrowRounded'
-import ReplayRounded from '@mui/icons-material/ReplayRounded'
-import SlowMotionVideoRounded from '@mui/icons-material/SlowMotionVideoRounded'
-import StarRounded from '@mui/icons-material/StarRounded'
-import StarBorderRounded from '@mui/icons-material/StarBorderRounded'
-import ExpandMoreRounded from '@mui/icons-material/ExpandMoreRounded'
-import ChevronRightRounded from '@mui/icons-material/ChevronRightRounded'
-import {type VowelDetails, vowelDetailsService, type VowelExample} from '../../services/VowelDetailsService'
-import './VowelDetailsCard.css'
-
-type VowelActionControlsProps = {
-    onPlay?: () => void
-    onReplay?: () => void
-    onSlow?: () => void
-}
-
-
-interface VowelProps {
-    details: VowelDetails | null;
-    // onToggleFavourite?: () => void;
-    examples?: VowelExample[];
-}
-
+    Typography
+} from "@mui/material";
+import type {VowelActionControlsProps, VowelProps} from "./VowelDetails.types";
 
 function VowelActionControls({onPlay, onReplay, onSlow}: VowelActionControlsProps) {
     return (
@@ -73,7 +58,7 @@ function VowelActionControls({onPlay, onReplay, onSlow}: VowelActionControlsProp
     )
 }
 
-function VowelDetailsCardHeader({details}: VowelProps) {
+export function VowelDetailsCardHeader({details}: VowelProps) {
     return (
         <CardHeader
             className="vowel-details__header"
@@ -105,7 +90,7 @@ function VowelDetailsCardHeader({details}: VowelProps) {
     )
 }
 
-function VowelDetailsCardContent({details}: VowelProps) {
+export function VowelDetailsCardContent({details}: VowelProps) {
     return (
         <CardContent className="vowel-details__content">
             <VowelActionControls/>
@@ -181,34 +166,5 @@ function VowelDetailsCardContent({details}: VowelProps) {
                 </AccordionDetails>
             </Accordion>
         </CardContent>
-    )
-}
-
-
-export function VowelDetailsCard() {
-    const [details, setDetails] = useState<VowelDetails | null>(null)
-
-    useEffect(() => {
-        const subscription = vowelDetailsService.getVowelDetails().subscribe((response) => {
-            setDetails(response)
-        })
-
-        return () => subscription.unsubscribe()
-    }, [])
-
-    return (
-        <Box className="vowel-details">
-            <Card
-                className="vowel-details__card"
-                elevation={1}
-                sx={{
-                    width: {xs: '100%', sm: 380, md: 360, lg: 360},
-                }}
-            >
-                <VowelDetailsCardHeader details={details}/>
-
-                <VowelDetailsCardContent details={details}/>
-            </Card>
-        </Box>
     )
 }

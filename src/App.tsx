@@ -7,7 +7,7 @@ import {Box, ThemeProvider, useMediaQuery,} from '@mui/material'
 import {theme} from './theme';
 import './App.css'
 import {ResponsiveNavigation} from "./app/navigation/ResponsiveNavigation/ResponsiveNavigation.tsx";
-import {VowelDetailsCard} from "./components/vowel-details/VowelDetailsCard.tsx";
+import {VowelDetailsCard} from "./components/vowel-details/vowel-details-card/VowelDetailsCard.tsx";
 
 type NavKey = 'library' | 'listen' | 'speak' | 'stats'
 
