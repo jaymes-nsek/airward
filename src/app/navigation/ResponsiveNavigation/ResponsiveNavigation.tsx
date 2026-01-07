@@ -1,4 +1,4 @@
-import type {ReactNode} from 'react';
+import {type ReactNode, useMemo} from 'react';
 import {
     AppBar,
     BottomNavigation,
@@ -10,20 +10,14 @@ import {
     Toolbar,
 } from '@mui/material'
 import {BrandLogo} from "../../../components/brand-logo/BrandLogo.tsx";
+import {useLocation, useNavigate} from 'react-router-dom';
+import type {NavItem} from "../../../App.tsx";
 
 type NavKey = 'library' | 'listen' | 'speak' | 'stats'
 
-type ResponsiveNavigationItem = {
-    key: NavKey
-    label: string
-    icon: React.ReactElement
-}
-
 type ResponsiveNavigationProps = {
     isDesktop: boolean
-    items: ResponsiveNavigationItem[]
-    value: NavKey
-    onChange: (key: NavKey) => void
+    items: NavItem[]
     children: ReactNode
 }
 
@@ -31,13 +25,32 @@ const APP_BAR_HEIGHT = 72
 const MOBILE_APP_BAR_HEIGHT = 64 // MUI default toolbar height on mobile (typically 56, but safe to be explicit)
 const BOTTOM_NAV_HEIGHT = 56      // MUI BottomNavigation default height
 
+
 export function ResponsiveNavigation({
                                          isDesktop,
                                          items,
-                                         value,
-                                         onChange,
                                          children,
                                      }: ResponsiveNavigationProps) {
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    // const paths = useMemo(() => items.map((i) => i.to), [items]);
+
+    // Derive active NavKey from the current URL
+    const activeKey = useMemo<NavKey>(() => {
+        const match = items.find((item) => item.to === location.pathname);
+        return match?.key ?? items[0].key;
+    }, [items, location.pathname]);
+
+    // console.log('currentIndex', activeKey);
+
+    function handleNavChange(newKey: NavKey) {
+        const item = items.find(i => i.key === newKey);
+        if (item) {
+            navigate(item.to);
+        }
+    }
+
     if (isDesktop) {
         return (
             <>
@@ -48,12 +61,15 @@ export function ResponsiveNavigation({
                         </Box>
 
                         <Tabs
-                            value={value}
-                            onChange={(_, newValue) => onChange(newValue as NavKey)}
+                            value={activeKey}
+                            onChange={(_, newKey: NavKey) => handleNavChange(newKey)}
                             sx={{minHeight: APP_BAR_HEIGHT}}
                         >
                             {items.map((item) => (
-                                <Tab key={item.key} label={item.label} value={item.key}/>
+                                <Tab
+                                    key={item.key}
+                                    label={item.label}
+                                    value={item.key}/>
                             ))}
                         </Tabs>
                     </Toolbar>
@@ -103,8 +119,8 @@ export function ResponsiveNavigation({
             >
                 <BottomNavigation
                     showLabels
-                    value={value}
-                    onChange={(_, newValue) => onChange(newValue as NavKey)}
+                    value={activeKey}
+                    onChange={(_, newKey: NavKey) => handleNavChange(newKey)}
                     sx={{height: BOTTOM_NAV_HEIGHT}}
                 >
                     {items.map((item) => (
