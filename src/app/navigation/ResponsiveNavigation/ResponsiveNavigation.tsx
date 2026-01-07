@@ -85,7 +85,7 @@ export function ResponsiveNavigation({
                 sx={{
                     pt: `${MOBILE_APP_BAR_HEIGHT}px`, // space for top AppBar
                     pb: `${BOTTOM_NAV_HEIGHT}px`,     // space for bottom nav
-                    px: 2,
+                    // px: 2,
                 }}
             >
                 {children}

@@ -1,5 +1,4 @@
 import {
-    ChevronRightRounded,
     ExpandMoreRounded,
     PlayArrowRounded,
     ReplayRounded,
@@ -26,7 +25,7 @@ import type {VowelActionControlsProps, VowelProps} from "./VowelDetails.types";
 
 function VowelActionControls({onPlay, onReplay, onSlow}: VowelActionControlsProps) {
     return (
-        <Stack className="vowel-details-controls" direction="row" spacing={1} flexWrap="wrap">
+        <Stack className="vowel-details-controls" direction="row" gap={2} flexWrap="wrap">
             <Button
                 className="vowel-details-controls__button"
                 size="small"
@@ -36,6 +35,7 @@ function VowelActionControls({onPlay, onReplay, onSlow}: VowelActionControlsProp
             >
                 Play
             </Button>
+
             <Button
                 className="vowel-details-controls__button"
                 size="small"
@@ -45,6 +45,7 @@ function VowelActionControls({onPlay, onReplay, onSlow}: VowelActionControlsProp
             >
                 Replay
             </Button>
+
             <Button
                 className="vowel-details-controls__button"
                 size="small"
@@ -70,14 +71,6 @@ export function VowelDetailsCardHeader({details}: VowelProps) {
                         </Typography>
                     ) : (
                         <Skeleton variant="text" width={80}/>
-                    )}
-                    {details ? (
-                        <Typography className="vowel-details__keyword" variant="subtitle2"
-                                    sx={{color: 'text.secondary'}}>
-                            {details.keyword}
-                        </Typography>
-                    ) : (
-                        <Skeleton variant="text" width={120}/>
                     )}
                 </Box>
             }
@@ -129,9 +122,9 @@ export function VowelDetailsCardContent({details}: VowelProps) {
                                             {example.word}
                                         </Typography>
 
-                                        <IconButton size="small" aria-label="open example">
+                                        {/*<IconButton size="small" aria-label="open example">
                                             <ChevronRightRounded fontSize="small"/>
-                                        </IconButton>
+                                        </IconButton>*/}
                                     </Stack>
 
                                     <Stack
