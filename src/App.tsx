@@ -4,7 +4,7 @@ import MicRounded from '@mui/icons-material/MicRounded'
 import InsightsRounded from '@mui/icons-material/InsightsRounded'
 import {type ReactElement} from 'react'
 import {Box, useMediaQuery,} from '@mui/material'
-import './App.css'
+import './App.scss'
 import {ResponsiveNavigation} from "./app/navigation/ResponsiveNavigation/ResponsiveNavigation.tsx";
 import {theme} from "./theme";
 import { Outlet } from "react-router-dom"

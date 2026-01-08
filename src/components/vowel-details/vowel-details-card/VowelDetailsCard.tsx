@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react'
 import {Box, Card,} from '@mui/material'
 import {vowelDetailsService} from '../../../services/VowelDetailsService.ts'
-import './VowelDetailsCard.css'
+import './VowelDetailsCard.scss'
 import type {VowelDetails} from "../VowelDetails.types.ts";
 import {VowelDetailsCardContent, VowelDetailsCardHeader} from "../VowelDetails.tsx";
 
