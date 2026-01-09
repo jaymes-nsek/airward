@@ -7,11 +7,38 @@ export const appRoutes: RouteObject[] = [
     {
         element: <App/>,
         children: [
-            {path: '/', element: <Navigate to="/library" replace/>},
-            {path: '/library', element: <VowelLibraryPage/>},
-            {path: '/listen', element: <Test name={'listen'}/>},
-            {path: '/speak', element: <Test name={'speak'}/>},
-            {path: '/stats', element: <Test name={'stats'}/>},
+            {
+                path: '/',
+                element: <Navigate to="/library" replace/>
+            },
+            {
+                path: '/library',
+                element: <VowelLibraryPage/>,
+                loader: () => ({
+                    title: 'Vowel Library',
+                })
+            },
+            {
+                path: '/listen',
+                element: <Test name={'listen'}/>,
+                loader: () => ({
+                    title: 'Listen',
+                })
+            },
+            {
+                path: '/speak',
+                element: <Test name={'speak'}/>,
+                loader: () => ({
+                    title: 'Speak',
+                })
+            },
+            {
+                path: '/stats',
+                element: <Test name={'stats'}/>,
+                loader: () => ({
+                    title: 'Stats',
+                })
+            },
             {path: '*', element: <Navigate to="/library" replace/>},
         ],
     },
