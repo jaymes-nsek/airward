@@ -74,8 +74,14 @@ export function VowelLibraryPage() {
     }
 
     return (
-        <Box className="vowel-library-page">
-            <Box className="vowel-library-page__list">
+        <Box
+            component="article"
+            className="vowel-library-page"
+        >
+            <Box
+                component="section"
+                className="vowel-library-page__list"
+            >
                 <VowelLibraryList
                     vowels={state.vowels}
                     selectedIndex={state.selectedIndex}
@@ -85,7 +91,10 @@ export function VowelLibraryPage() {
             </Box>
 
             {/*sx={{width: {xs: '100%', sm: 380},  md: 360, lg: 360}}*/}
-            <Box className="vowel-library-page__details-n-controls">
+            <Box
+                component="section"
+                className="vowel-library-page__details-n-controls"
+            >
                 <VowelDetailsCard/>
 
                 <VowelControls className="vowel-library-page__controls"
