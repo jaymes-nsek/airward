@@ -1,16 +1,54 @@
-import {Box, Button, CircularProgress, Typography} from '@mui/material'
+import {Box, type BoxProps, Button, CircularProgress, Typography} from '@mui/material'
 import ArrowBackIosNewRounded from '@mui/icons-material/ArrowBackIosNewRounded'
 import ArrowForwardIosRounded from '@mui/icons-material/ArrowForwardIosRounded'
 import type {VowelDetails} from '../vowel-details/VowelDetails.types.ts'
 import './VowelLibrary.scss'
 
-type VowelLibraryListProps = {
+
+export type VowelBaseProps =  Omit<BoxProps, 'onSelect'> & {
     vowels: VowelDetails[]
+}
+
+export type VowelControlsProps = VowelBaseProps & {
+    onPrev: () => void
+    onNext: () => void
+}
+
+export type VowelLibraryListProps = VowelBaseProps & {
     selectedIndex: number
     isLoading: boolean
     onSelect: (index: number) => void
-    onPrev: () => void
-    onNext: () => void
+}
+
+
+export function VowelControls({
+                                  vowels,
+                                  onPrev,
+                                  onNext,
+                                  ...rest
+                              }: VowelControlsProps) {
+    return (
+        <Box className="vowel-library__controls" {...rest}>
+            <Button
+                className="vowel-library__control"
+                variant="outlined"
+                startIcon={<ArrowBackIosNewRounded/>}
+                onClick={onPrev}
+                disabled={!vowels.length}
+            >
+                Prev
+            </Button>
+            <Button
+                className="vowel-library__control"
+                variant="outlined"
+                endIcon={<ArrowForwardIosRounded/>}
+                onClick={onNext}
+                disabled={!vowels.length}
+            >
+                Next
+            </Button>
+        </Box>
+    )
 }
 
 export function VowelLibraryList({
@@ -18,14 +56,13 @@ export function VowelLibraryList({
                                      selectedIndex,
                                      isLoading,
                                      onSelect,
-                                     onPrev,
-                                     onNext,
+                                     ...rest
                                  }: VowelLibraryListProps) {
     return (
-        <Box className="vowel-library">
+        <Box className="vowel-library" {...rest}>
             {isLoading ? (
                 <Box className="vowel-library__loading">
-                    <CircularProgress size={28} />
+                    <CircularProgress size={28}/>
                     <Typography variant="body2">Loading vowels...</Typography>
                 </Box>
             ) : (
@@ -47,6 +84,7 @@ export function VowelLibraryList({
                             </Button>
                         ))}
                     </Box>
+
                     <Box className="vowel-library__grid vowel-library__grid--desktop">
                         {vowels.map((vowel, index) => (
                             <Button
@@ -63,26 +101,6 @@ export function VowelLibraryList({
                                 {vowel.symbol}
                             </Button>
                         ))}
-                    </Box>
-                    <Box className="vowel-library__controls">
-                        <Button
-                            className="vowel-library__control"
-                            variant="outlined"
-                            startIcon={<ArrowBackIosNewRounded />}
-                            onClick={onPrev}
-                            disabled={!vowels.length}
-                        >
-                            Prev
-                        </Button>
-                        <Button
-                            className="vowel-library__control"
-                            variant="outlined"
-                            endIcon={<ArrowForwardIosRounded />}
-                            onClick={onNext}
-                            disabled={!vowels.length}
-                        >
-                            Next
-                        </Button>
                     </Box>
                 </>
             )}

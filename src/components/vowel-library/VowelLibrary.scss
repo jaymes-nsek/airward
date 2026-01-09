@@ -54,23 +54,7 @@
         display: grid;
       }
     }
-
-    &__controls {
-      display: none;
-    }
   }
-}
 
-@media (min-width: 1200px) {
-  .vowel-library {
-    &__grid {
-      &--tablet {
-        display: none;
-      }
 
-      &--desktop {
-        display: grid;
-      }
-    }
-  }
 }

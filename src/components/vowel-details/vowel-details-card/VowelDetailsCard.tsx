@@ -22,9 +22,6 @@ export function VowelDetailsCard() {
             <Card
                 className="vowel-details__card"
                 elevation={1}
-                sx={{
-                    width: {xs: '100%', sm: 380, md: 360, lg: 360},
-                }}
             >
                 <VowelDetailsCardHeader details={details}/>
 

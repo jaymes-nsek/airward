@@ -3,7 +3,7 @@ import {Box} from '@mui/material'
 import {vowelLibraryService} from '../../services/VowelLibraryService.ts'
 import type {VowelDetails} from '../vowel-details/VowelDetails.types.ts'
 import {VowelDetailsCard} from '../vowel-details/vowel-details-card/VowelDetailsCard.tsx'
-import {VowelLibraryList} from './VowelLibrary.tsx'
+import {VowelControls, VowelLibraryList} from '../vowel-library/VowelLibrary.tsx'
 import './VowelLibraryPage.scss'
 
 type VowelLibraryState = {
@@ -81,12 +81,17 @@ export function VowelLibraryPage() {
                     selectedIndex={state.selectedIndex}
                     isLoading={isLoading}
                     onSelect={handleSelect}
-                    onPrev={handlePrev}
-                    onNext={handleNext}
                 />
             </Box>
-            <Box className="vowel-library-page__details">
-                <VowelDetailsCard />
+
+            {/*sx={{width: {xs: '100%', sm: 380},  md: 360, lg: 360}}*/}
+            <Box className="vowel-library-page__details-n-controls">
+                <VowelDetailsCard/>
+
+                <VowelControls className="vowel-library-page__controls"
+                               vowels={state.vowels}
+                               onPrev={handlePrev}
+                               onNext={handleNext}/>
             </Box>
         </Box>
     )

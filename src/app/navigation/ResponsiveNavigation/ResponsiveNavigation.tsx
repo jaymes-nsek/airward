@@ -1,17 +1,9 @@
 import {type ReactNode, useMemo} from 'react';
-import {
-    AppBar,
-    BottomNavigation,
-    BottomNavigationAction,
-    Box,
-    Paper,
-    Tab,
-    Tabs,
-    Toolbar,
-} from '@mui/material'
+import {AppBar, BottomNavigation, BottomNavigationAction, Box, Paper, Tab, Tabs, Toolbar,} from '@mui/material'
 import {BrandLogo} from "../../../components/brand-logo/BrandLogo.tsx";
 import {useLocation, useNavigate} from 'react-router-dom';
 import type {NavItem} from "../../../App.tsx";
+import "./ResponsiveNavigation.scss"
 
 type NavKey = 'library' | 'listen' | 'speak' | 'stats'
 
@@ -19,6 +11,7 @@ type ResponsiveNavigationProps = {
     isDesktop: boolean
     items: NavItem[]
     children: ReactNode
+    mainStyle?: React.CSSProperties
 }
 
 const APP_BAR_HEIGHT = 72
@@ -30,6 +23,7 @@ export function ResponsiveNavigation({
                                          isDesktop,
                                          items,
                                          children,
+                                         mainStyle
                                      }: ResponsiveNavigationProps) {
     const navigate = useNavigate();
     const location = useLocation();
@@ -50,6 +44,34 @@ export function ResponsiveNavigation({
             navigate(item.to);
         }
     }
+
+    // Assign device-width-specific main HTML element
+    const main = isDesktop ?
+        <Box
+            className="responsive-navigation__main"
+            component="main"
+            sx={{
+                pt: `${(APP_BAR_HEIGHT + 16)}px`, // offset for fixed AppBar
+                px: '16px', // {xs: 2, lg: 4}
+            }}
+            style={mainStyle}
+        >
+            {children}
+        </Box>
+        :
+        <Box
+            className="responsive-navigation__main"
+            component="main"
+            sx={{
+                pt: `${MOBILE_APP_BAR_HEIGHT + 12}px`, // space for top AppBar
+                pb: `${BOTTOM_NAV_HEIGHT}px`,     // space for bottom nav
+                px: {xs: '0px', sm: '12px'},
+            }}
+            style={mainStyle}
+        >
+            {children}
+        </Box>
+
 
     if (isDesktop) {
         return (
@@ -75,15 +97,7 @@ export function ResponsiveNavigation({
                     </Toolbar>
                 </AppBar>
 
-                <Box
-                    component="main"
-                    sx={{
-                        pt: `${APP_BAR_HEIGHT}px`, // offset for fixed AppBar
-                        px: {xs: 2, lg: 4},
-                    }}
-                >
-                    {children}
-                </Box>
+                {main}
             </>
         )
     }
@@ -96,16 +110,7 @@ export function ResponsiveNavigation({
                 </Toolbar>
             </AppBar>
 
-            <Box
-                component="main"
-                sx={{
-                    pt: `${MOBILE_APP_BAR_HEIGHT}px`, // space for top AppBar
-                    pb: `${BOTTOM_NAV_HEIGHT}px`,     // space for bottom nav
-                    // px: 2,
-                }}
-            >
-                {children}
-            </Box>
+            {main}
 
             <Paper
                 sx={{
