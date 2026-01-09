@@ -2,7 +2,7 @@ import MenuBookRounded from '@mui/icons-material/MenuBookRounded'
 import HeadphonesRounded from '@mui/icons-material/HeadphonesRounded'
 import MicRounded from '@mui/icons-material/MicRounded'
 import InsightsRounded from '@mui/icons-material/InsightsRounded'
-import {type CSSProperties, type ReactElement, useEffect} from 'react'
+import {type CSSProperties, useEffect} from 'react'
 import {useMediaQuery,} from '@mui/material'
 import './App.scss'
 import {
@@ -14,14 +14,14 @@ import {theme} from "./theme";
 import {Outlet, useMatches} from "react-router-dom"
 
 
-type NavKey = 'library' | 'listen' | 'speak' | 'stats'
+// type NavKey = 'library' | 'listen' | 'speak' | 'stats'
 
-export type NavItem = {
-    key: NavKey;
-    label: string;
-    icon: ReactElement;
-    to: string;
-};
+export type NavItem<NavKey extends string = string> = {
+    key: NavKey
+    label: string
+    icon?: React.ReactNode
+    to: string
+}
 
 const navItems: NavItem[] = [
     {key: 'library', label: 'Library', icon: <MenuBookRounded/>, to: '/library'},

@@ -1,9 +1,9 @@
-import {type ReactNode, useMemo} from 'react';
+import {type ReactNode} from 'react';
 import {AppBar, BottomNavigation, BottomNavigationAction, Box, Paper, Tab, Tabs, Toolbar,} from '@mui/material'
 import {BrandLogo} from "../../../components/brand-logo/BrandLogo.tsx";
-import {useLocation, useNavigate} from 'react-router-dom';
 import type {NavItem} from "../../../App.tsx";
 import "./ResponsiveNavigation.scss"
+import {useNavRouting} from "../useNavRouting.ts";
 
 type NavKey = 'library' | 'listen' | 'speak' | 'stats'
 
@@ -59,25 +59,7 @@ export function AppBarWrapper({
                                   isDesktop,
                                   items,
                               }: ResponsiveNavigationProps) {
-    const navigate = useNavigate();
-    const location = useLocation();
-
-    // const paths = useMemo(() => items.map((i) => i.to), [items]);
-
-    // Derive active NavKey from the current URL
-    const activeKey = useMemo<NavKey>(() => {
-        const match = items.find((item) => item.to === location.pathname);
-        return match?.key ?? items[0].key;
-    }, [items, location.pathname]);
-
-    // console.log('currentIndex', activeKey);
-
-    function handleNavChange(newKey: NavKey) {
-        const item = items.find(i => i.key === newKey);
-        if (item) {
-            navigate(item.to);
-        }
-    }
+    const {activeKey, handleNavChange} = useNavRouting(items)
 
     if (isDesktop)
         return <>
@@ -119,27 +101,7 @@ export function BottomNavWrapper({
                                      isDesktop,
                                      items,
                                  }: ResponsiveNavigationProps) {
-
-
-    const navigate = useNavigate();
-    const location = useLocation();
-
-    // const paths = useMemo(() => items.map((i) => i.to), [items]);
-
-    // Derive active NavKey from the current URL
-    const activeKey = useMemo<NavKey>(() => {
-        const match = items.find((item) => item.to === location.pathname);
-        return match?.key ?? items[0].key;
-    }, [items, location.pathname]);
-
-    // console.log('currentIndex', activeKey);
-
-    function handleNavChange(newKey: NavKey) {
-        const item = items.find(i => i.key === newKey);
-        if (item) {
-            navigate(item.to);
-        }
-    }
+    const {activeKey, handleNavChange} = useNavRouting(items)
 
     if (isDesktop) {
         return <> </>
