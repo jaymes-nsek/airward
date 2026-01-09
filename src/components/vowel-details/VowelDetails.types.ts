@@ -9,8 +9,10 @@ export type VowelExample = {
 }
 
 export type VowelDetails = {
+    id: string
     symbol: string
     keyword: string
+    notes?: string;
     isFavorite: boolean
     examples: VowelExample[]
 }

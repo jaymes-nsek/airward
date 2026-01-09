@@ -87,6 +87,8 @@ export function VowelLibraryPage() {
                     selectedIndex={state.selectedIndex}
                     isLoading={isLoading}
                     onSelect={handleSelect}
+                    role="listbox"
+                    tabIndex={0}
                 />
             </Box>
 

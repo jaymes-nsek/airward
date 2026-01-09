@@ -4,402 +4,460 @@ import type {VowelDetails} from '../components/vowel-details/VowelDetails.types.
 
 const DUMMY_VOWEL_LIBRARY: VowelDetails[] = [
     {
-        symbol: '/iː/',
-        keyword: 'FLEECE',
+        id: "_1_vowel_i_long",
+        symbol: "/iː/",
+        keyword: "FLEECE",
+        notes: "i long",
         isFavorite: false,
         examples: [
             {
-                word: 'see',
+                word: "see",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/siː/'},
-                    {dialect: 'AmE', ipa: '/siː/'},
-                ],
+                    {dialect: "BrE", ipa: "/siː/"},
+                    {dialect: "AmE", ipa: "/siː/"}
+                ]
             },
             {
-                word: 'green',
+                word: "green",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/ɡriːn/'},
-                ],
-            },
-        ],
+                    {dialect: "BrE", ipa: "/ɡriːn/"}
+                ]
+            }
+        ]
     },
+
     {
-        symbol: '/ɪ/',
-        keyword: 'KIT',
+        id: "_2_vowel_i_short",
+        symbol: "/ɪ/",
+        keyword: "KIT",
+        notes: "i short",
         isFavorite: false,
         examples: [
             {
-                word: 'sit',
+                word: "sit",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/sɪt/'},
-                    {dialect: 'AmE', ipa: '/sɪt/'},
-                ],
+                    {dialect: "BrE", ipa: "/sɪt/"},
+                    {dialect: "AmE", ipa: "/sɪt/"}
+                ]
             },
             {
-                word: 'pin',
+                word: "busy",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/pɪn/'},
-                ],
-            },
-        ],
+                    {dialect: "BrE", ipa: "/ˈbɪzi/"}
+                ]
+            }
+        ]
     },
+
     {
-        symbol: '/e/',
-        keyword: 'DRESS',
+        id: "_3_vowel_e",
+        symbol: "/e/",
+        keyword: "DRESS",
+        notes: "e",
         isFavorite: false,
         examples: [
             {
-                word: 'bed',
+                word: "bed",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/bed/'},
-                    {dialect: 'AmE', ipa: '/bɛd/'},
-                ],
+                    {dialect: "BrE", ipa: "/bed/"},
+                    {dialect: "AmE", ipa: "/bɛd/"}
+                ]
             },
             {
-                word: 'check',
+                word: "head",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/tʃek/'},
-                ],
-            },
-        ],
+                    {dialect: "BrE", ipa: "/hed/"}
+                ]
+            }
+        ]
     },
+
     {
-        symbol: '/æ/',
-        keyword: 'TRAP',
+        id: "_4_vowel_ae",
+        symbol: "/æ/",
+        keyword: "TRAP",
+        notes: "ae",
         isFavorite: false,
         examples: [
             {
-                word: 'cat',
+                word: "cat",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/kæt/'},
-                    {dialect: 'AmE', ipa: '/kæt/'},
-                ],
+                    {dialect: "BrE", ipa: "/kæt/"},
+                    {dialect: "AmE", ipa: "/kæt/"}
+                ]
             },
             {
-                word: 'map',
+                word: "happy",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/mæp/'},
-                ],
-            },
-        ],
+                    {dialect: "BrE", ipa: "/ˈhæpi/"}
+                ]
+            }
+        ]
     },
+
     {
-        symbol: '/ɑː/',
-        keyword: 'PALM',
+        id: "_5_vowel_schwa",
+        symbol: "/ə/",
+        keyword: "SCHWA",
+        notes: "schwa",
         isFavorite: false,
         examples: [
             {
-                word: 'arm',
+                word: "about",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/ɑːm/'},
-                    {dialect: 'AmE', ipa: '/ɑːrm/'},
-                ],
+                    {dialect: "BrE", ipa: "/əˈbaʊt/"},
+                    {dialect: "AmE", ipa: "/əˈbaʊt/"}
+                ]
             },
             {
-                word: 'start',
+                word: "teacher",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/stɑːt/'},
-                ],
-            },
-        ],
+                    {dialect: "BrE", ipa: "/ˈtiːtʃə/"}
+                ]
+            }
+        ]
     },
+
     {
-        symbol: '/ɒ/',
-        keyword: 'LOT',
+        id: "_6_vowel_v",
+        symbol: "/ʌ/",
+        keyword: "STRUT",
+        notes: "v",
         isFavorite: false,
         examples: [
             {
-                word: 'hot',
+                word: "cup",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/hɒt/'},
-                ],
+                    {dialect: "BrE", ipa: "/kʌp/"},
+                    {dialect: "AmE", ipa: "/kʌp/"}
+                ]
             },
             {
-                word: 'dog',
+                word: "love",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/dɒɡ/'},
-                ],
-            },
-        ],
+                    {dialect: "BrE", ipa: "/lʌv/"}
+                ]
+            }
+        ]
     },
+
     {
-        symbol: '/ɔː/',
-        keyword: 'THOUGHT',
+        id: "_7_vowel_3_long",
+        symbol: "/ɜː/",
+        keyword: "NURSE",
+        notes: "3 long",
         isFavorite: false,
         examples: [
             {
-                word: 'law',
+                word: "bird",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/lɔː/'},
-                    {dialect: 'AmE', ipa: '/lɔː/'},
-                ],
+                    {dialect: "BrE", ipa: "/bɜːd/"},
+                    {dialect: "AmE", ipa: "/bɝd/"}
+                ]
             },
             {
-                word: 'talk',
+                word: "learn",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/tɔːk/'},
-                ],
-            },
-        ],
+                    {dialect: "BrE", ipa: "/lɜːn/"}
+                ]
+            }
+        ]
     },
+
     {
-        symbol: '/ʊ/',
-        keyword: 'FOOT',
+        id: "_8_vowel_a_long",
+        symbol: "/ɑː/",
+        keyword: "PALM",
+        notes: "a long",
         isFavorite: false,
         examples: [
             {
-                word: 'book',
+                word: "father",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/bʊk/'},
-                    {dialect: 'AmE', ipa: '/bʊk/'},
-                ],
+                    {dialect: "BrE", ipa: "/ˈfɑːðə/"},
+                    {dialect: "AmE", ipa: "/ˈfɑðɚ/"}
+                ]
             },
             {
-                word: 'good',
+                word: "calm",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/ɡʊd/'},
-                ],
-            },
-        ],
+                    {dialect: "BrE", ipa: "/kɑːm/"}
+                ]
+            }
+        ]
     },
+
     {
-        symbol: '/uː/',
-        keyword: 'GOOSE',
+        id: "_9_vowel_o_short",
+        symbol: "/ɒ/",
+        keyword: "LOT",
+        notes: "o short (a-flipped)",
         isFavorite: false,
         examples: [
             {
-                word: 'goose',
+                word: "hot",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/ɡuːs/'},
-                    {dialect: 'AmE', ipa: '/ɡuːs/'},
-                ],
+                    {dialect: "BrE", ipa: "/hɒt/"}
+                ]
             },
             {
-                word: 'move',
+                word: "watch",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/muːv/'},
-                ],
-            },
-        ],
+                    {dialect: "BrE", ipa: "/wɒtʃ/"}
+                ]
+            }
+        ]
     },
+
     {
-        symbol: '/ʌ/',
-        keyword: 'STRUT',
+        id: "_10_vowel_o_long",
+        symbol: "/ɔː/",
+        keyword: "THOUGHT",
+        notes: "o long",
         isFavorite: false,
         examples: [
             {
-                word: 'cup',
+                word: "law",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/kʌp/'},
-                    {dialect: 'AmE', ipa: '/kʌp/'},
-                ],
+                    {dialect: "BrE", ipa: "/lɔː/"},
+                    {dialect: "AmE", ipa: "/lɔ/"}
+                ]
             },
             {
-                word: 'luck',
+                word: "north",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/lʌk/'},
-                ],
-            },
-        ],
+                    {dialect: "BrE", ipa: "/nɔːθ/"}
+                ]
+            }
+        ]
     },
+
     {
-        symbol: '/ɜː/',
-        keyword: 'NURSE',
-        isFavorite: true,
-        examples: [
-            {
-                word: 'bird',
-                pronunciations: [
-                    {dialect: 'BrE', ipa: '/bɜːd/'},
-                    {dialect: 'AmE', ipa: '/bɝːd/'},
-                ],
-            },
-            {
-                word: 'learn',
-                pronunciations: [
-                    {dialect: 'BrE', ipa: '/lɜːn/'},
-                    {dialect: 'AmE', ipa: '/lɝːn/'},
-                ],
-            },
-        ],
-    },
-    {
-        symbol: '/ə/',
-        keyword: 'COMMA',
+        id: "_11_vowel_u_short",
+        symbol: "/ʊ/",
+        keyword: "FOOT",
+        notes: "u short (horse shoe)",
         isFavorite: false,
         examples: [
             {
-                word: 'about',
+                word: "book",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/əˈbaʊt/'},
-                    {dialect: 'AmE', ipa: '/əˈbaʊt/'},
-                ],
+                    {dialect: "BrE", ipa: "/bʊk/"},
+                    {dialect: "AmE", ipa: "/bʊk/"}
+                ]
             },
             {
-                word: 'sofa',
+                word: "good",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/ˈsəʊfə/'},
-                ],
-            },
-        ],
+                    {dialect: "BrE", ipa: "/ɡʊd/"}
+                ]
+            }
+        ]
     },
+
     {
-        symbol: '/eɪ/',
-        keyword: 'FACE',
+        id: "_12_vowel_u_long",
+        symbol: "/uː/",
+        keyword: "GOOSE",
+        notes: "u long",
         isFavorite: false,
         examples: [
             {
-                word: 'day',
+                word: "food",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/deɪ/'},
-                    {dialect: 'AmE', ipa: '/deɪ/'},
-                ],
+                    {dialect: "BrE", ipa: "/fuːd/"},
+                    {dialect: "AmE", ipa: "/fuːd/"}
+                ]
             },
             {
-                word: 'rain',
+                word: "blue",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/reɪn/'},
-                ],
-            },
-        ],
+                    {dialect: "BrE", ipa: "/bluː/"}
+                ]
+            }
+        ]
     },
+
     {
-        symbol: '/aɪ/',
-        keyword: 'PRICE',
+        id: "_13_vowel_ia",
+        symbol: "/ɪə/",
+        keyword: "NEAR",
+        notes: "i_schwa",
         isFavorite: false,
         examples: [
             {
-                word: 'my',
+                word: "here",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/maɪ/'},
-                    {dialect: 'AmE', ipa: '/maɪ/'},
-                ],
+                    {dialect: "BrE", ipa: "/hɪə/"}
+                ]
             },
             {
-                word: 'time',
+                word: "idea",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/taɪm/'},
-                ],
-            },
-        ],
+                    {dialect: "BrE", ipa: "/aɪˈdɪə/"}
+                ]
+            }
+        ]
     },
+
     {
-        symbol: '/ɔɪ/',
-        keyword: 'CHOICE',
+        id: "_14_vowel_ea",
+        symbol: "/eə/",
+        keyword: "SQUARE",
+        notes: "e_schwa",
         isFavorite: false,
         examples: [
             {
-                word: 'boy',
+                word: "care",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/bɔɪ/'},
-                    {dialect: 'AmE', ipa: '/bɔɪ/'},
-                ],
+                    {dialect: "BrE", ipa: "/keə/"}
+                ]
             },
             {
-                word: 'join',
+                word: "fair",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/dʒɔɪn/'},
-                ],
-            },
-        ],
+                    {dialect: "BrE", ipa: "/feə/"}
+                ]
+            }
+        ]
     },
+
     {
-        symbol: '/aʊ/',
-        keyword: 'MOUTH',
+        id: "_15_vowel_ua",
+        symbol: "/ʊə/",
+        keyword: "CURE",
+        notes: "u-hs_schwa",
         isFavorite: false,
         examples: [
             {
-                word: 'now',
+                word: "tour",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/naʊ/'},
-                    {dialect: 'AmE', ipa: '/naʊ/'},
-                ],
+                    {dialect: "BrE", ipa: "/tʊə/"}
+                ]
             },
             {
-                word: 'loud',
+                word: "pure",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/laʊd/'},
-                ],
-            },
-        ],
+                    {dialect: "BrE", ipa: "/pjʊə/"}
+                ]
+            }
+        ]
     },
+
     {
-        symbol: '/əʊ/',
-        keyword: 'GOAT',
+        id: "_16_vowel_ei",
+        symbol: "/eɪ/",
+        keyword: "FACE",
+        notes: "ei",
         isFavorite: false,
         examples: [
             {
-                word: 'home',
+                word: "day",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/həʊm/'},
-                ],
+                    {dialect: "BrE", ipa: "/deɪ/"},
+                    {dialect: "AmE", ipa: "/deɪ/"}
+                ]
             },
             {
-                word: 'go',
+                word: "rain",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/ɡəʊ/'},
-                    {dialect: 'AmE', ipa: '/ɡoʊ/'},
-                ],
-            },
-        ],
+                    {dialect: "BrE", ipa: "/reɪn/"}
+                ]
+            }
+        ]
     },
+
     {
-        symbol: '/ɪə/',
-        keyword: 'NEAR',
+        id: "_17_vowel_ai",
+        symbol: "/aɪ/",
+        keyword: "PRICE",
+        notes: "ai",
         isFavorite: false,
         examples: [
             {
-                word: 'ear',
+                word: "time",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/ɪə/'},
-                ],
+                    {dialect: "BrE", ipa: "/taɪm/"},
+                    {dialect: "AmE", ipa: "/taɪm/"}
+                ]
             },
             {
-                word: 'cheer',
+                word: "eye",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/tʃɪə/'},
-                ],
-            },
-        ],
+                    {dialect: "BrE", ipa: "/aɪ/"}
+                ]
+            }
+        ]
     },
+
     {
-        symbol: '/eə/',
-        keyword: 'SQUARE',
+        id: "_18_vowel_oi",
+        symbol: "/ɔɪ/",
+        keyword: "CHOICE",
+        notes: "inverted-C_i",
         isFavorite: false,
         examples: [
             {
-                word: 'hair',
+                word: "boy",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/heə/'},
-                ],
+                    {dialect: "BrE", ipa: "/bɔɪ/"},
+                    {dialect: "AmE", ipa: "/bɔɪ/"}
+                ]
             },
             {
-                word: 'care',
+                word: "voice",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/keə/'},
-                ],
-            },
-        ],
+                    {dialect: "BrE", ipa: "/vɔɪs/"}
+                ]
+            }
+        ]
     },
+
     {
-        symbol: '/ʊə/',
-        keyword: 'CURE',
+        id: "_19_vowel_ou",
+        symbol: "/əʊ/",
+        keyword: "GOAT",
+        notes: "schwa_u-hs",
         isFavorite: false,
         examples: [
             {
-                word: 'tour',
+                word: "go",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/tʊə/'},
-                ],
+                    {dialect: "BrE", ipa: "/ɡəʊ/"},
+                    {dialect: "AmE", ipa: "/ɡoʊ/"}
+                ]
             },
             {
-                word: 'pure',
+                word: "home",
                 pronunciations: [
-                    {dialect: 'BrE', ipa: '/pjʊə/'},
-                ],
-            },
-        ],
+                    {dialect: "BrE", ipa: "/həʊm/"}
+                ]
+            }
+        ]
     },
+
+    {
+        id: "_20_vowel_au",
+        symbol: "/aʊ/",
+        keyword: "MOUTH",
+        notes: "a_u-hs",
+        isFavorite: false,
+        examples: [
+            {
+                word: "now",
+                pronunciations: [
+                    {dialect: "BrE", ipa: "/naʊ/"},
+                    {dialect: "AmE", ipa: "/naʊ/"}
+                ]
+            },
+            {
+                word: "house",
+                pronunciations: [
+                    {dialect: "BrE", ipa: "/haʊs/"}
+                ]
+            }
+        ]
+    }
 ]
 
 class VowelLibraryService extends BaseService {
