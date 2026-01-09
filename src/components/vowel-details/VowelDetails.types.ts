@@ -5,12 +5,14 @@ export type VowelExample = {
     pronunciations: Array<{
         dialect: PronunciationDialects
         ipa: string
+        notes: string | null
     }>
 }
 
 export type VowelDetails = {
     id: string
     symbol: string
+    name: string
     keyword: string
     notes?: string;
     isFavorite: boolean

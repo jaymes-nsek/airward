@@ -5,6 +5,7 @@ import type {VowelDetails} from "../components/vowel-details/VowelDetails.types.
 
 const DUMMY_VOWEL_DETAILS: VowelDetails = {
     id: "_7_vowel_3_long",
+    name: "vowel er long",
     symbol: "/ɜː/",
     keyword: "NURSE",
     notes: "3 long",
@@ -13,20 +14,20 @@ const DUMMY_VOWEL_DETAILS: VowelDetails = {
         {
             word: "bird",
             pronunciations: [
-                { dialect: "BrE", ipa: "/bɜːd/" },
-                { dialect: "AmE", ipa: "/bɝd/" }
+                {dialect: "BrE", ipa: "/bɜːd/", notes: null},
+                {dialect: "AmE", ipa: "/bɝd/", notes: null}
             ]
         },
         {
             word: "learn",
             pronunciations: [
-                { dialect: "BrE", ipa: "/lɜːn/" }
+                {dialect: "BrE", ipa: "/lɜːn/", notes: null}
             ]
         },
         {
             word: 'work',
             pronunciations: [
-                {dialect: 'BrE', ipa: '/wɜːk/'},
+                {dialect: 'BrE', ipa: '/wɜːk/', notes: null},
             ],
         }
     ]

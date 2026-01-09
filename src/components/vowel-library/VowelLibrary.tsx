@@ -102,6 +102,7 @@ export function VowelLibraryList({
                                     id={getVowelOptionId(vowel.id)}
                                     role="option"
                                     aria-selected={isSelected}
+                                    aria-label={vowel.name}
                                     tabIndex={-1} // critical: only the listbox is tabbable
                                     className={
                                         index === selectedIndex
