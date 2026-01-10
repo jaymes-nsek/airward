@@ -1,11 +1,4 @@
-import {
-    ExpandMoreRounded,
-    PlayArrowRounded,
-    ReplayRounded,
-    SlowMotionVideoRounded,
-    StarBorderRounded,
-    StarRounded
-} from "@mui/icons-material";
+import {ExpandMoreRounded, PlayArrowRounded, ReplayRounded, SlowMotionVideoRounded} from "@mui/icons-material";
 import {
     Accordion,
     AccordionDetails,
@@ -16,7 +9,6 @@ import {
     CardHeader,
     Chip,
     Divider,
-    IconButton,
     Skeleton,
     Stack,
     Typography
@@ -66,19 +58,24 @@ export function VowelDetailsCardHeader({details}: VowelProps) {
             title={
                 <Box className="vowel-details__title">
                     {details ? (
-                        <Typography className="vowel-details__symbol" variant="h4" sx={{color: 'primary.main'}}>
-                            {details.symbol}
+                        <Typography
+                            className="vowel-details__symbol"
+                            variant="h2"
+                            sx={{color: 'primary.main'}}
+                            aria-label={details.name}
+                        >
+                            {details.symbol} &mdash; {details.name}
                         </Typography>
                     ) : (
                         <Skeleton variant="text" width={80}/>
                     )}
                 </Box>
             }
-            action={
-                <IconButton className="vowel-details__favorite" color="primary" aria-label="save vowel">
+            /*action={
+                <IconButton className="vowel-details__favorite" color="primary" aria-label="Toggle vowel favourite state">
                     {details?.isFavorite ? <StarRounded/> : <StarBorderRounded/>}
                 </IconButton>
-            }
+            }*/
         />
     )
 }
@@ -95,7 +92,7 @@ export function VowelDetailsCardContent({details}: VowelProps) {
                     className="vowel-details__examples-summary"
                     expandIcon={<ExpandMoreRounded/>}
                 >
-                    <Typography variant="subtitle2">Examples</Typography>
+                    <Typography variant="h3">Examples</Typography>
                 </AccordionSummary>
 
                 <AccordionDetails className="vowel-details__examples-body">
@@ -116,7 +113,7 @@ export function VowelDetailsCardContent({details}: VowelProps) {
                                     <Stack direction="row" alignItems="center" justifyContent="space-between">
                                         <Typography
                                             className="vowel-details__example-word"
-                                            variant="subtitle2"
+                                            variant="h4"
                                             sx={{color: 'primary.main'}}
                                         >
                                             {example.word}
