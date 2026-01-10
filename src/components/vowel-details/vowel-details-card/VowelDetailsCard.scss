@@ -68,8 +68,12 @@
     display: flex;
     align-items: center;
     gap: 8px;
+
+    &__button {
+        text-transform: none;
+        flex: 1 1 0; // equal widths
+        min-width: 84px !important; // avoids overflow from long labels
+    }
 }
 
-.vowel-details-controls__button {
-    text-transform: none;
-}
+
