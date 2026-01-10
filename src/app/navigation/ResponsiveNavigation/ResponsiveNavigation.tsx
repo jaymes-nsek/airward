@@ -1,5 +1,17 @@
 import {type ReactNode} from 'react';
-import {AppBar, BottomNavigation, BottomNavigationAction, Box, Paper, Tab, Tabs, Toolbar,} from '@mui/material'
+import {
+    AppBar,
+    type AppBarProps,
+    BottomNavigation,
+    BottomNavigationAction,
+    Box,
+    type BoxProps,
+    Paper,
+    type PaperProps,
+    Tab,
+    Tabs,
+    Toolbar,
+} from '@mui/material'
 import {BrandLogo} from "../../../components/brand-logo/BrandLogo.tsx";
 import type {NavItem} from "../../../App.tsx";
 import "./ResponsiveNavigation.scss"
@@ -7,13 +19,16 @@ import {useNavRouting} from "../useNavRouting.ts";
 
 type NavKey = 'library' | 'listen' | 'speak' | 'stats'
 
-type MainNavigationProps = {
-    isDesktop: boolean
+type MainNavProps = BoxProps & {
     children: ReactNode
-    mainStyle?: React.CSSProperties
 }
 
-type ResponsiveNavigationProps = {
+type AppBarNavProps = AppBarProps & {
+    isDesktop: boolean
+    items: NavItem[]
+}
+
+type BottomNavigationNavProps = PaperProps & {
     isDesktop: boolean
     items: NavItem[]
 }
@@ -23,47 +38,36 @@ const MOBILE_APP_BAR_HEIGHT = 64 // MUI default toolbar height on mobile (typica
 const BOTTOM_NAV_HEIGHT = 56      // MUI BottomNavigation default height
 
 export function MainWrapper({
-                                isDesktop,
                                 children,
-                                mainStyle
-                            }: MainNavigationProps) {
+                                ...rest
+                            }: MainNavProps) {
     // Assign device-width-specific main HTML element
-    return isDesktop ?
+    return (
         <Box
             className="responsive-navigation__main"
             component="main"
-            sx={{
-                pt: `${(APP_BAR_HEIGHT + 16)}px`, // offset for fixed AppBar
-                px: '16px', // {xs: 2, lg: 4}
-            }}
-            style={mainStyle}
+            {...rest}
         >
             {children}
         </Box>
-        :
-        <Box
-            className="responsive-navigation__main"
-            component="main"
-            sx={{
-                pt: `${MOBILE_APP_BAR_HEIGHT + 12}px`, // space for top AppBar
-                pb: `${BOTTOM_NAV_HEIGHT}px`,     // space for bottom nav
-                px: {xs: '0px', sm: '12px'},
-            }}
-            style={mainStyle}
-        >
-            {children}
-        </Box>
+    )
 }
 
 export function AppBarWrapper({
                                   isDesktop,
                                   items,
-                              }: ResponsiveNavigationProps) {
+                                  ...rest
+                              }: AppBarNavProps) {
     const {activeKey, handleNavChange} = useNavRouting(items)
 
     if (isDesktop)
         return <>
-            <AppBar position="fixed" elevation={1}>
+            <AppBar
+                position="fixed"
+                elevation={1}
+                className="responsive-navigation__app-bar"
+                {...rest}
+            >
                 <Toolbar sx={{gap: 3, px: {xs: 2, lg: 4}, minHeight: APP_BAR_HEIGHT}}>
                     <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5}}>
                         <BrandLogo/>
@@ -87,7 +91,11 @@ export function AppBarWrapper({
 
     return (
         <>
-            <AppBar position="fixed" elevation={4}>
+            <AppBar
+                position="fixed"
+                elevation={4}
+                {...rest}
+            >
                 <Toolbar sx={{minHeight: MOBILE_APP_BAR_HEIGHT}}>
                     <BrandLogo height={28}/>
                 </Toolbar>
@@ -100,7 +108,8 @@ export function AppBarWrapper({
 export function BottomNavWrapper({
                                      isDesktop,
                                      items,
-                                 }: ResponsiveNavigationProps) {
+                                     ...rest
+                                 }: BottomNavigationNavProps) {
     const {activeKey, handleNavChange} = useNavRouting(items)
 
     if (isDesktop) {
@@ -109,14 +118,8 @@ export function BottomNavWrapper({
 
     return <>
         <Paper
-            sx={{
-                position: 'fixed',
-                bottom: 0,
-                left: 0,
-                right: 0,
-                zIndex: (muiTheme) => muiTheme.zIndex.appBar,
-            }}
             elevation={8}
+            {...rest}
         >
             <BottomNavigation
                 showLabels

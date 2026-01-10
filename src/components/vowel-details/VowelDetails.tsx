@@ -18,6 +18,8 @@ import type {VowelActionControlsProps, VowelProps} from "./VowelDetails.types";
 function VowelActionControls({onPlay, onReplay, onSlow}: VowelActionControlsProps) {
     return (
         <Stack className="vowel-details-controls" direction="row" gap={2} flexWrap="wrap">
+            <h3 className="visually-hidden">Vowel Details Audio Controls</h3>
+
             <Button
                 className="vowel-details-controls__button"
                 size="small"

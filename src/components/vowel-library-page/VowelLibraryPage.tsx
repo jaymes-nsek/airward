@@ -6,7 +6,7 @@ import {VowelDetailsCard} from '../vowel-details/vowel-details-card/VowelDetails
 import {VowelControls, VowelLibraryList} from '../vowel-library/VowelLibrary.tsx'
 import './VowelLibraryPage.scss'
 
-type VowelLibraryState = {
+export type VowelLibraryState = {
     vowels: VowelDetails[]
     selectedIndex: number
 }
@@ -83,6 +83,7 @@ export function VowelLibraryPage() {
                 className="vowel-library-page__list"
             >
                 <VowelLibraryList
+                    className="u-fill"
                     vowels={state.vowels}
                     selectedIndex={state.selectedIndex}
                     isLoading={isLoading}
@@ -92,17 +93,19 @@ export function VowelLibraryPage() {
                 />
             </Box>
 
-            {/*sx={{width: {xs: '100%', sm: 380},  md: 360, lg: 360}}*/}
             <Box
                 component="section"
                 className="vowel-library-page__details-n-controls"
             >
-                <VowelDetailsCard/>
+                <VowelDetailsCard
+                    className="u-fill"
+                    vowel={selectedVowel}/>
 
-                <VowelControls className="vowel-library-page__controls"
-                               vowels={state.vowels}
-                               onPrev={handlePrev}
-                               onNext={handleNext}/>
+                <VowelControls
+                    className="vowel-library-page__controls u-fixed"
+                    vowels={state.vowels}
+                    onPrev={handlePrev}
+                    onNext={handleNext}/>
             </Box>
         </Box>
     )

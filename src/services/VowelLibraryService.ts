@@ -167,6 +167,25 @@ const DUMMY_VOWEL_LIBRARY: VowelDetails[] = [
                 pronunciations: [
                     {dialect: "BrE", ipa: "/lɜːn/", notes: null}
                 ]
+            },
+            {
+                word: 'work',
+                pronunciations: [
+                    {dialect: 'BrE', ipa: '/wɜːk/', notes: null},
+                ],
+            },
+            {
+                word: 'third',
+                pronunciations: [
+                    {dialect: 'BrE', ipa: '/θɜːd/', notes: null},
+                    {dialect: 'AmE', ipa: '/θɝːd/', notes: null},
+                ],
+            },
+            {
+                word: 'turn',
+                pronunciations: [
+                    {dialect: 'BrE', ipa: '/tɜːn/', notes: null},
+                ],
             }
         ]
     },

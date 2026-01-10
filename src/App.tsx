@@ -59,11 +59,15 @@ function App() {
 
     return (
         <>
-            <AppBarWrapper isDesktop={isDesktop} items={navItems}/>
+            <AppBarWrapper
+                isDesktop={isDesktop}
+                items={navItems}
+                className="u-fixed"
+            />
 
             <MainWrapper
-                isDesktop={isDesktop}
-                mainStyle={{
+                className="app__main-wrapper u-fill"
+                style={{
                     '--background-default': theme.palette.background.default,
                 } as CSSProperties}
             >
@@ -72,7 +76,18 @@ function App() {
                 <Outlet/>
             </MainWrapper>
 
-            <BottomNavWrapper isDesktop={isDesktop} items={navItems}/>
+            <BottomNavWrapper
+                sx={{
+                    position: 'fixed',
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    zIndex: (muiTheme) => muiTheme.zIndex.appBar,
+                }}
+                isDesktop={isDesktop}
+                className="u-fixed"
+                items={navItems}
+            />
         </>
     )
 }

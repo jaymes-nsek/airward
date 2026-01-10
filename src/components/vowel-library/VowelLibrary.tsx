@@ -6,9 +6,6 @@ import './VowelLibrary.scss'
 import {useListboxNavigation} from "../../shared/a11y/useListboxNavigation.ts";
 import {getVowelOptionId} from "../../shared/a11y/listboxIds.ts";
 
-
-
-
 export type VowelBaseProps = Omit<BoxProps, 'onSelect'> & {
     vowels: VowelDetails[]
 }
