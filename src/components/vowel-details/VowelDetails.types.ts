@@ -1,16 +1,20 @@
 export type PronunciationDialects = 'BrE' | 'AmE'
 
+export interface Pronunciation {
+    dialect: PronunciationDialects;
+    ipa: string;
+    notes: string | null;
+}
+
+
 export type VowelExample = {
     word: string
-    pronunciations: Array<{
-        dialect: PronunciationDialects
-        ipa: string
-        notes: string | null
-    }>
+    pronunciations: Pronunciation[]
 }
 
 export type VowelDetails = {
     id: string
+    canonicalId: number;
     symbol: string
     name: string
     keyword: string

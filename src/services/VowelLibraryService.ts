@@ -1,7 +1,7 @@
 import {map, Observable} from "rxjs";
 import {BaseService} from './BaseService.ts'
 import type {HttpClient} from "../app/api/http/HttpClient.ts";
-import {type ApiError, type ApiSuccess, isApiError} from "../app/api/contracts/ApiContracts";
+import {ApiError, type ApiSuccess, isApiError} from "../app/api/contracts/ApiContracts";
 import {AppApiRoutes} from "../app/api/routes/AppApiRoutes.ts";
 import type {VowelDetails} from "../components/vowel-details/VowelDetails.types.ts";
 
@@ -12,8 +12,11 @@ export class VowelLibraryService extends BaseService {
         super(httpClient);
     }
 
-
-    public getVowelList(): Observable<ApiSuccess<VowelDetails> | ApiError> {
+    /**
+     * @throws Error when the backend responds with success=false
+     *
+     */
+    public getVowelList(): Observable<ApiSuccess<VowelDetails>> {
         // TODO: calling isApiError() just to check boolean might be redundant and
         //  maybe the boolean should be removed from ApiSuccess and ApiError and
         //  these are computed from the presence of data or error fields.
@@ -23,7 +26,8 @@ export class VowelLibraryService extends BaseService {
         return this.getJson$<ApiSuccess<VowelDetails> | ApiError>(this.routes.vowels.list()).pipe(
             map((res) => {
                 if (isApiError(res)) {
-                    throw new Error(`${res.error.code}: ${res.error.message}`);
+                    // throw new ApiError(res.error);
+                    throw res;
                 }
 
                 return res;

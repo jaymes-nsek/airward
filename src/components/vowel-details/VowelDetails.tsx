@@ -1,4 +1,7 @@
-import {ExpandMoreRounded, PlayArrowRounded, ReplayRounded, SlowMotionVideoRounded} from "@mui/icons-material";
+import ExpandMoreRounded from '@mui/icons-material/ExpandMoreRounded'
+import PlayArrowRounded from '@mui/icons-material/PlayArrowRounded'
+import ReplayRounded from '@mui/icons-material/ReplayRounded'
+import SlowMotionVideoRounded from '@mui/icons-material/SlowMotionVideoRounded'
 import {
     Accordion,
     AccordionDetails,
@@ -53,6 +56,9 @@ function VowelActionControls({onPlay, onReplay, onSlow}: VowelActionControlsProp
     )
 }
 
+/**
+ * @param details The selected vowel
+ */
 export function VowelDetailsCardHeader({details}: VowelProps) {
     return (
         <CardHeader
@@ -82,6 +88,9 @@ export function VowelDetailsCardHeader({details}: VowelProps) {
     )
 }
 
+/**
+ * @param details The selected vowel
+ */
 export function VowelDetailsCardContent({details}: VowelProps) {
     return (
         <CardContent className="vowel-details__content">

@@ -1,10 +1,11 @@
-import {useEffect, useMemo, useState} from 'react'
+import {useEffect, useState} from 'react'
 import {Box} from '@mui/material'
 import {vowelLibraryService} from '../../services/VowelLibraryService.ts'
 import type {VowelDetails} from '../vowel-details/VowelDetails.types.ts'
 import {VowelDetailsCard} from '../vowel-details/vowel-details-card/VowelDetailsCard.tsx'
 import {VowelControls, VowelLibraryList} from '../vowel-library/VowelLibrary.tsx'
 import './VowelLibraryPage.scss'
+import {finalize} from "rxjs";
 
 export type VowelLibraryState = {
     vowels: VowelDetails[]
@@ -12,41 +13,53 @@ export type VowelLibraryState = {
 }
 
 export function VowelLibraryPage() {
-    const [state, setState] = useState<VowelLibraryState>({vowels: [], selectedIndex: 0})
-    const [isLoading, setIsLoading] = useState(true)
+    const [vowelLibState, setVowelLibState] = useState<VowelLibraryState>({vowels: [], selectedIndex: 0})
+    const [isLoadingState, setIsLoadingState] = useState(true)
 
     useEffect(() => {
-        const subscription = vowelLibraryService.getVowelLibrary().subscribe((response) => {
-            setState({vowels: response, selectedIndex: 0})
-            setIsLoading(false)
-        })
+        console.log('effect mount');
 
-        return () => subscription.unsubscribe()
+        const subscription = vowelLibraryService
+            .getVowelList()
+            .pipe(finalize(() => setIsLoadingState(false))) // use finalize to make sure loading is effected in one place, on both success and failure
+            .subscribe({
+                next: (response) => {
+
+                    const vowels: VowelDetails[] = response.data.items ?? [];
+
+                    console.log('VowelLibraryPage finished...', 'first item is:', vowels[0])
+
+                    setVowelLibState({vowels, selectedIndex: 0});
+                },
+                error: (err) => {
+                    console.error('Failed to load vowel library', err);
+                    // setError(...)  ?
+                },
+            });
+
+        return () => {
+            console.log('effect cleanup: unsubscribe');
+            subscription.unsubscribe()
+        }
     }, [])
 
-    const selectedVowel = useMemo(() => {
-        if (!state.vowels.length) {
-            return null
-        }
+    // Instantiate the selected vowel
+    let selectedVowel: VowelDetails | null = null;
 
-        return state.vowels[state.selectedIndex] ?? state.vowels[0]
-    }, [state.selectedIndex, state.vowels])
+    if (vowelLibState.vowels.length) {
+        selectedVowel = vowelLibState.vowels[vowelLibState.selectedIndex] ?? vowelLibState.vowels[0];
+    }
 
-    useEffect(() => {
-        if (selectedVowel) {
-            // vowelDetailsService.setVowelDetails(selectedVowel)
-        }
-    }, [selectedVowel])
-
+    //region Handlers
     const handleSelect = (index: number) => {
-        setState((prevState) => ({
+        setVowelLibState((prevState) => ({
             ...prevState,
             selectedIndex: index,
         }))
     }
 
     const handlePrev = () => {
-        setState((prevState) => {
+        setVowelLibState((prevState) => {
             const count = prevState.vowels.length
             if (!count) {
                 return prevState
@@ -60,7 +73,7 @@ export function VowelLibraryPage() {
     }
 
     const handleNext = () => {
-        setState((prevState) => {
+        setVowelLibState((prevState) => {
             const count = prevState.vowels.length
             if (!count) {
                 return prevState
@@ -72,6 +85,7 @@ export function VowelLibraryPage() {
             }
         })
     }
+    //endregion
 
     return (
         <Box
@@ -84,9 +98,9 @@ export function VowelLibraryPage() {
             >
                 <VowelLibraryList
                     className="u-fill"
-                    vowels={state.vowels}
-                    selectedIndex={state.selectedIndex}
-                    isLoading={isLoading}
+                    vowels={vowelLibState.vowels}
+                    selectedIndex={vowelLibState.selectedIndex}
+                    isLoading={isLoadingState}
                     onSelect={handleSelect}
                     role="listbox"
                     tabIndex={0}
@@ -103,7 +117,7 @@ export function VowelLibraryPage() {
 
                 <VowelControls
                     className="vowel-library-page__controls u-fixed"
-                    vowels={state.vowels}
+                    vowels={vowelLibState.vowels}
                     onPrev={handlePrev}
                     onNext={handleNext}/>
             </Box>

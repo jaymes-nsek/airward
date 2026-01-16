@@ -13,16 +13,25 @@ export interface ApiSuccess<T> {
     meta?: ApiMeta | string;
 }
 
-export interface ApiError {
-    success: false;
-    error: {
-        code: string;
-        message: string;
-        details?: unknown;
-    };
+export interface ErrorDetails {
+    code: string;
+    message: string;
+    details?: unknown;
+}
+
+export class ApiError extends Error {
+    success: boolean;
+    error: ErrorDetails;
     meta?: {
         requestId?: string;
     };
+
+    constructor(error: ErrorDetails) {
+        super(`${error.code}: ${error.message}`);
+        this.name = 'ApiError';
+        this.success = false;
+        this.error = error;
+    }
 }
 
 export function isApiError<T>(res: ApiSuccess<T> | ApiError): res is ApiError {
