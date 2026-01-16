@@ -1,9 +1,9 @@
 import {useEffect, useState} from 'react'
 import {Box} from '@mui/material'
-import {vowelLibraryService} from '../../services/VowelLibraryService.ts'
-import type {VowelDetails} from '../vowel-details/VowelDetails.types.ts'
-import {VowelDetailsCard} from '../vowel-details/vowel-details-card/VowelDetailsCard.tsx'
-import {VowelControls, VowelLibraryList} from '../vowel-library/VowelLibrary.tsx'
+import {vowelLibraryService} from '../../../services/VowelLibraryService.ts'
+import type {VowelDetails} from '../../../components/vowel-details/VowelDetails.types.ts'
+import {VowelDetailsCard} from '../../../components/vowel-details/vowel-details-card/VowelDetailsCard.tsx'
+import {VowelControls, VowelLibraryList} from '../../../components/vowel-library/VowelLibrary.tsx'
 import './VowelLibraryPage.scss'
 import {finalize} from "rxjs";
 
