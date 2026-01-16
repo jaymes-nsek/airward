@@ -1,7 +1,3 @@
-import MenuBookRounded from '@mui/icons-material/MenuBookRounded'
-import HeadphonesRounded from '@mui/icons-material/HeadphonesRounded'
-import MicRounded from '@mui/icons-material/MicRounded'
-import InsightsRounded from '@mui/icons-material/InsightsRounded'
 import {type CSSProperties, useEffect} from 'react'
 import {useMediaQuery,} from '@mui/material'
 import './App.scss'
@@ -12,23 +8,7 @@ import {
 } from "./app/navigation/ResponsiveNavigation/ResponsiveNavigation.tsx";
 import {theme} from "./theme";
 import {Outlet, useMatches} from "react-router-dom"
-
-
-// type NavKey = 'library' | 'listen' | 'speak' | 'stats'
-
-export type NavItem<NavKey extends string = string> = {
-    key: NavKey
-    label: string
-    icon?: React.ReactNode
-    to: string
-}
-
-const navItems: NavItem[] = [
-    {key: 'library', label: 'Library', icon: <MenuBookRounded/>, to: '/library'},
-    {key: 'listen', label: 'Listen', icon: <HeadphonesRounded/>, to: '/listen'},
-    {key: 'speak', label: 'Speak', icon: <MicRounded/>, to: '/speak'},
-    {key: 'stats', label: 'Stats', icon: <InsightsRounded/>, to: '/stats'},
-]
+import {navItems} from "./app/navigation/nav-items.tsx";
 
 type TitleLoaderData = { title?: string }
 
