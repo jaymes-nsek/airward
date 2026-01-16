@@ -1,7 +1,5 @@
 .vowel-details {
     width: 100%;
-    display: flex;
-    justify-content: center;
 }
 
 .vowel-details__card {
@@ -21,11 +19,6 @@
 .vowel-details__symbol {
     font-weight: 700;
     line-height: 1.1;
-}
-
-.vowel-details__keyword {
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
 }
 
 .vowel-details__content {
@@ -75,8 +68,12 @@
     display: flex;
     align-items: center;
     gap: 8px;
+
+    &__button {
+        text-transform: none;
+        flex: 1 1 0; // equal widths
+        min-width: 84px !important; // avoids overflow from long labels
+    }
 }
 
-.vowel-details-controls__button {
-    text-transform: none;
-}
+

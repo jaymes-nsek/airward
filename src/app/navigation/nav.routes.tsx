@@ -1,17 +1,44 @@
-import {VowelDetailsCard} from "../../components/vowel-details/vowel-details-card/VowelDetailsCard.tsx";
 import {Navigate, type RouteObject} from 'react-router-dom';
 import App from "../../App.tsx";
 import {Test} from "../../components/listen/ListenPage.tsx";
+import {VowelLibraryPage} from "../pages/vowel-library-page/VowelLibraryPage.tsx";
 
 export const appRoutes: RouteObject[] = [
     {
         element: <App/>,
         children: [
-            {path: '/', element: <Navigate to="/library" replace/>},
-            {path: '/library', element: <VowelDetailsCard/>},
-            {path: '/listen', element: <Test name={'listen'}/>},
-            {path: '/speak', element: <Test name={'speak'}/>},
-            {path: '/stats', element: <Test name={'stats'}/>},
+            {
+                path: '/',
+                element: <Navigate to="/library" replace/>
+            },
+            {
+                path: '/library',
+                element: <VowelLibraryPage/>,
+                loader: () => ({
+                    title: 'Vowel Library',
+                })
+            },
+            {
+                path: '/listen',
+                element: <Test name={'listen'}/>,
+                loader: () => ({
+                    title: 'Listen',
+                })
+            },
+            {
+                path: '/speak',
+                element: <Test name={'speak'}/>,
+                loader: () => ({
+                    title: 'Speak',
+                })
+            },
+            {
+                path: '/stats',
+                element: <Test name={'stats'}/>,
+                loader: () => ({
+                    title: 'Stats',
+                })
+            },
             {path: '*', element: <Navigate to="/library" replace/>},
         ],
     },

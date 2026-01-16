@@ -20,6 +20,7 @@ export const theme = createTheme({
         },
         divider: '#e2e8f0',
     },
+
     components: {
         MuiAppBar: {
             defaultProps: {
@@ -85,6 +86,7 @@ export const theme = createTheme({
             styleOverrides: {
                 root: ({ theme }) => ({
                     color: theme.palette.secondary.contrastText,
+                    fontSize: '1rem',
                 }),
 
                 outlined: ({ theme }) => ({
@@ -98,4 +100,22 @@ export const theme = createTheme({
             },
         },
     },
+
+    typography: {
+        h2: {
+            fontSize: '1.6rem',
+            /*lineHeight: 1.2,
+            fontWeight: 600,*/
+        },
+        h3: {
+            fontSize: '1rem',
+            /*lineHeight: 1.2,
+            fontWeight: 600,*/
+        },
+        h4: {
+            fontSize: '1rem',
+            /*lineHeight: 1.2,
+            fontWeight: 600,*/
+        }
+    }
 });

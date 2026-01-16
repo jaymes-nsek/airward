@@ -1,0 +1,49 @@
+.vowel-library-page {
+  display: grid;
+  column-gap: 16px;
+  height: 100%;
+  width: 100%;
+
+  &__list {
+    display: none;
+  }
+
+  &__details-n-controls {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__controls {
+    width: 100%;
+    display: grid;
+    column-gap: 24px;
+    grid-template-columns: repeat(2, 1fr);
+
+    position: sticky;
+    bottom: 56px;
+    background: var(--background-default);
+  }
+}
+
+@media (min-width: 768px) {
+  .vowel-library-page {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 360px);
+    align-items: start;
+
+    &__list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    &__controls {
+      display: none;
+    }
+
+    &__details-n-controls {
+      display: grid;
+      row-gap: 16px;
+      padding-bottom: 16px;
+    }
+  }
+}

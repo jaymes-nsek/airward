@@ -1,34 +1,25 @@
-import {useEffect, useState} from 'react'
-import {Box, Card,} from '@mui/material'
-import {vowelDetailsService} from '../../../services/VowelDetailsService.ts'
-import './VowelDetailsCard.css'
+import {Box, type BoxProps, Card,} from '@mui/material'
+import './VowelDetailsCard.scss'
 import type {VowelDetails} from "../VowelDetails.types.ts";
 import {VowelDetailsCardContent, VowelDetailsCardHeader} from "../VowelDetails.tsx";
 
+export type VowelDetailsCardProps = BoxProps & {
+    vowel: VowelDetails | null
+}
 
-export function VowelDetailsCard() {
-    const [details, setDetails] = useState<VowelDetails | null>(null)
-
-    useEffect(() => {
-        const subscription = vowelDetailsService.getVowelDetails().subscribe((response) => {
-            setDetails(response)
-        })
-
-        return () => subscription.unsubscribe()
-    }, [])
-
+export function VowelDetailsCard({vowel, ...rest}: VowelDetailsCardProps) {
     return (
-        <Box className="vowel-details">
+        <Box
+            className="vowel-details"
+            {...rest}
+        >
             <Card
                 className="vowel-details__card"
                 elevation={1}
-                sx={{
-                    width: {xs: '100%', sm: 380, md: 360, lg: 360},
-                }}
             >
-                <VowelDetailsCardHeader details={details}/>
+                <VowelDetailsCardHeader details={vowel}/>
 
-                <VowelDetailsCardContent details={details}/>
+                <VowelDetailsCardContent details={vowel}/>
             </Card>
         </Box>
     )
