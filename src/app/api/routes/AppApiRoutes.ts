@@ -1,14 +1,24 @@
+const API_PREFIX = '/api/v1' as const;
 
-export interface VowelRoutes {
-    list(): string;
+function join(...parts: string[]) {
+    return parts
+        .filter(Boolean)
+        .map((p, i) => (i === 0 ? p.replace(/\/+$/g, '') : p.replace(/^\/+|\/+$/g, '')))
+        .join('/')
+        .replace(/\/{2,}/g, '/');
 }
 
-export interface ApiRoutes {
-    vowels: VowelRoutes;
+function sanitisePath(value: string): string {
+    if (value.length === 0) {
+        throw new Error('Path segment must not be empty');
+    }
+
+    return encodeURIComponent(value);
 }
 
-export class AppApiRoutes implements ApiRoutes {
-    public readonly vowels: VowelRoutes = {
-        list: () => "/api/v1/vowels",
-    };
-}
+export const apiRoutes = {
+    vowels: {
+        list: () => join(API_PREFIX, 'vowels'),
+        audio: (vowelId: string) => join(API_PREFIX, 'vowels', 'audio', sanitisePath(vowelId)),
+    },
+} as const;

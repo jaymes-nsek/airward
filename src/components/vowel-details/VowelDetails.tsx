@@ -17,6 +17,9 @@ import {
     Typography
 } from "@mui/material";
 import type {VowelActionControlsProps, VowelProps} from "./VowelDetails.types";
+import {useGetVowelAudio} from "./hooks/useGetVowelAudio.ts";
+import {useVowelAudioPlayback} from "./hooks/useVowelAudioPlayback.ts";
+
 
 function VowelActionControls({onPlay, onReplay, onSlow}: VowelActionControlsProps) {
     return (
@@ -56,9 +59,6 @@ function VowelActionControls({onPlay, onReplay, onSlow}: VowelActionControlsProp
     )
 }
 
-/**
- * @param details The selected vowel
- */
 export function VowelDetailsCardHeader({details}: VowelProps) {
     return (
         <CardHeader
@@ -92,9 +92,28 @@ export function VowelDetailsCardHeader({details}: VowelProps) {
  * @param details The selected vowel
  */
 export function VowelDetailsCardContent({details}: VowelProps) {
+    const {audioUrl, error} = useGetVowelAudio(details?.id);
+    const {audioRef, onPlayHandler} = useVowelAudioPlayback(details, audioUrl);
+
+    if (error) {
+        console.error('VowelDetailsCardContent ERR:', error);
+    }
+
     return (
         <CardContent className="vowel-details__content">
-            <VowelActionControls/>
+            {/*disabled={!audioUrl}*/}
+            <>
+                <VowelActionControls onPlay={onPlayHandler}/>
+
+                <audio
+                    ref={audioRef}
+                    src={audioUrl ?? undefined}
+                    preload="auto"
+                    aria-hidden="true"
+                />
+
+                {/*{error && <p role="alert">{error}</p>}*/}
+            </>
 
             <Divider className="vowel-details__divider"/>
 
