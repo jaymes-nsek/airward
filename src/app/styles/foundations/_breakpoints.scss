@@ -1,3 +1,5 @@
+@use "sass:map";
+
 // Breakpoint values
 $breakpoints: (
         tablet: 768px, // Tablet layout starts here
@@ -6,8 +8,8 @@ $breakpoints: (
 
 // Breakpoint Accessor function
 @function breakpoint($name) {
-  @if map-has-key($breakpoints, $name) {
-    @return map-get($breakpoints, $name);
+  @if map.has-key($breakpoints, $name) {
+    @return map.get($breakpoints, $name);
   }
 
   @error "Unknown breakpoint `#{$name}`.";
