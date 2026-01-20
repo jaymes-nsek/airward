@@ -1,0 +1,21 @@
+// Breakpoint values
+$breakpoints: (
+        tablet: 768px, // Tablet layout starts here
+        desktop: 901px // Desktop layout starts here
+);
+
+// Breakpoint Accessor function
+@function breakpoint($name) {
+  @if map-has-key($breakpoints, $name) {
+    @return map-get($breakpoints, $name);
+  }
+
+  @error "Unknown breakpoint `#{$name}`.";
+}
+
+// Min-width queries
+@mixin media-up($name) {
+  @media (min-width: breakpoint($name)) {
+    @content;
+  }
+}

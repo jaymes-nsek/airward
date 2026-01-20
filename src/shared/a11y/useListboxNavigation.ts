@@ -27,7 +27,10 @@ function clamp(i: number, min: number, max: number) {
 }
 
 function normaliseSelectedIndex(selectedIndex: number, count: number) {
-    if (count <= 0) return -1
+    if (count <= 0) {
+        return -1
+    }
+
     return clamp(selectedIndex, 0, count - 1)
 }
 
@@ -43,7 +46,10 @@ export function useListboxNavigation({
 
     const move = React.useCallback(
         (next: number) => {
-            if (count <= 0) return
+            if (count <= 0) {
+                return
+            }
+
             const finalIndex = wrap
                 ? (next + count) % count
                 : clamp(next, 0, count - 1)
@@ -54,7 +60,9 @@ export function useListboxNavigation({
 
     const onKeyDown = React.useCallback(
         (e: React.KeyboardEvent<HTMLElement>) => {
-            if (count <= 0) return
+            if (count <= 0) {
+                return
+            }
 
             switch (e.key) {
                 case 'ArrowRight':
@@ -81,9 +89,13 @@ export function useListboxNavigation({
 
                 case 'Enter':
                 case ' ':
-                    if (!confirmOnSpaceEnter) return
+                    if (!confirmOnSpaceEnter) {
+                        return
+                    }
                     e.preventDefault()
-                    if (safeSelectedIndex >= 0) onSelect(safeSelectedIndex)
+                    if (safeSelectedIndex >= 0) {
+                        onSelect(safeSelectedIndex)
+                    }
                     return
 
                 default:
@@ -93,5 +105,5 @@ export function useListboxNavigation({
         [count, activeIndex, move, confirmOnSpaceEnter, safeSelectedIndex, onSelect]
     )
 
-    return { safeSelectedIndex, activeIndex, onKeyDown }
+    return {safeSelectedIndex, activeIndex, onKeyDown}
 }

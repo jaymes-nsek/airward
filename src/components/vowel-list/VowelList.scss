@@ -1,3 +1,5 @@
+@use './../../app/styles/foundations/breakpoints' as *;
+
 .vowel-library {
   display: flex;
   flex-direction: column;
@@ -14,11 +16,13 @@
     display: none;
     gap: 12px;
 
-    &--tablet {
+    @include media-up(tablet) {
+      display: grid;
       grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
     }
 
-    &--desktop {
+    @include media-up(desktop) {
+      display: grid;
       grid-template-columns: repeat(auto-fit, minmax(84px, 1fr));
     }
   }
@@ -45,16 +49,4 @@
     flex: 1;
     text-transform: none;
   }
-}
-
-@media (min-width: 768px) {
-  .vowel-library {
-    &__grid {
-      &--tablet {
-        display: grid;
-      }
-    }
-  }
-
-
 }

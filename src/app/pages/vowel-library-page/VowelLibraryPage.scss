@@ -1,3 +1,5 @@
+@use './../../../app/styles/foundations/breakpoints' as *;
+
 .vowel-library-page {
   display: grid;
   column-gap: 16px;
@@ -25,7 +27,7 @@
   }
 }
 
-@media (min-width: 768px) {
+@include media-up(tablet) {
   .vowel-library-page {
     grid-template-columns: minmax(0, 1fr) minmax(0, 360px);
     align-items: start;

@@ -2,9 +2,10 @@ import {Box, type BoxProps, Button, CircularProgress, Typography} from '@mui/mat
 import ArrowBackIosNewRounded from '@mui/icons-material/ArrowBackIosNewRounded'
 import ArrowForwardIosRounded from '@mui/icons-material/ArrowForwardIosRounded'
 import type {VowelDetails} from '../vowel-details/VowelDetails.types.ts'
-import './VowelLibrary.scss'
+import './VowelList.scss'
 import {useListboxNavigation} from "../../shared/a11y/useListboxNavigation.ts";
 import {getVowelOptionId} from "../../shared/a11y/listboxIds.ts";
+import clsx from "clsx";
 
 export type VowelBaseProps = Omit<BoxProps, 'onSelect'> & {
     vowels: VowelDetails[]
@@ -52,7 +53,7 @@ export function VowelControls({
     )
 }
 
-export function VowelLibraryList({
+export function VowelList({
                                      vowels,
                                      selectedIndex,
                                      isLoading,
@@ -89,7 +90,7 @@ export function VowelLibraryList({
                 </Box>
             ) : (
                 <>
-                    <Box className="vowel-library__grid vowel-library__grid--tablet">
+                    <Box className="vowel-library__grid">
                         {vowels.map((vowel, index) => {
                             const isSelected = index === safeSelectedIndex
 
@@ -101,11 +102,10 @@ export function VowelLibraryList({
                                     aria-selected={isSelected}
                                     aria-label={vowel.name}
                                     tabIndex={-1} // critical: only the listbox is tabbable
-                                    className={
-                                        index === selectedIndex
-                                            ? 'vowel-library__item vowel-library__item--active'
-                                            : 'vowel-library__item'
-                                    }
+                                    className={clsx(
+                                        'vowel-library__item',
+                                        index === selectedIndex && 'vowel-library__item--active'
+                                    )}
                                     variant={index === selectedIndex ? 'contained' : 'outlined'}
                                     color={index === selectedIndex ? 'primary' : 'inherit'}
                                     onClick={() => onSelect(index)}
@@ -114,24 +114,6 @@ export function VowelLibraryList({
                                 </Button>
                             )
                         })}
-                    </Box>
-
-                    <Box className="vowel-library__grid vowel-library__grid--desktop">
-                        {vowels.map((vowel, index) => (
-                            <Button
-                                key={vowel.id}
-                                className={
-                                    index === selectedIndex
-                                        ? 'vowel-library__item vowel-library__item--active'
-                                        : 'vowel-library__item'
-                                }
-                                variant={index === selectedIndex ? 'contained' : 'outlined'}
-                                color={index === selectedIndex ? 'primary' : 'inherit'}
-                                onClick={() => onSelect(index)}
-                            >
-                                {vowel.symbol}
-                            </Button>
-                        ))}
                     </Box>
                 </>
             )}
