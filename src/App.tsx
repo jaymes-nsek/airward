@@ -20,7 +20,9 @@ function useActiveRouteTitle() {
     // Find the deepest matched route that actually has loader data with a title
     for (let i = matches.length - 1; i >= 0; i--) {
         const data = matches[i].data as TitleLoaderData | undefined
-        if (data?.title) return data.title
+        if (data?.title) {
+            return data.title
+        }
     }
 
     return FALLBACK_TITLE
