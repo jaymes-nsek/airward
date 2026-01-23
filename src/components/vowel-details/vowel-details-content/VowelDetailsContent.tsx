@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 import type {VowelProps} from "../VowelDetails.types.ts";
 import {useGetVowelAudio} from "../hooks/useGetVowelAudio.ts";
-import {useVowelAudioPlayback} from "../hooks/useVowelAudioPlayback.ts";
 import {VowelActionControls} from "../vowel-action-controls/VowelActionControls.tsx";
 import './VowelDetailsContent.scss';
 
@@ -22,7 +21,6 @@ import './VowelDetailsContent.scss';
  */
 export function VowelDetailsContent({details}: VowelProps) {
     const {audioUrl, error} = useGetVowelAudio(details?.id);
-    const {audioRef, onPlayHandler} = useVowelAudioPlayback(details, audioUrl);
 
     if (error) {
         console.error('VowelDetailsCardContent ERR:', error);
@@ -32,15 +30,7 @@ export function VowelDetailsContent({details}: VowelProps) {
         <CardContent className="vowel-details-content">
             {/*disabled={!audioUrl}*/}
             <>
-                <VowelActionControls onPlay={onPlayHandler}/>
-
-                <audio
-                    ref={audioRef}
-                    src={audioUrl ?? undefined}
-                    preload="auto"
-                    aria-hidden="true"
-                />
-
+                <VowelActionControls audioUrl={audioUrl} details={details}/>
                 {/*{error && <p role="alert">{error}</p>}*/}
             </>
 

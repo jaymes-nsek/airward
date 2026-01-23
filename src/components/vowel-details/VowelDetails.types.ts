@@ -24,6 +24,8 @@ export type VowelDetails = {
 }
 
 export type VowelActionControlsProps = {
+    details: VowelDetails | null;
+    audioUrl: string | null;
     onPlay?: () => void
 }
 

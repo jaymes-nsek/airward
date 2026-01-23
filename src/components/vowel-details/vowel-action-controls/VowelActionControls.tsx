@@ -16,6 +16,7 @@ import {type ReactNode, useEffect, useMemo, useState} from "react";
 import {SpeedRounded} from "@mui/icons-material";
 import SlowMotionVideoRounded from "@mui/icons-material/SlowMotionVideoRounded";
 import './VowelActionControls.scss'
+import {useVowelAudioPlayback} from "../hooks/useVowelAudioPlayback.ts";
 
 const defaultPlaybackSettings: PlaybackSettings = {
     speed: 'normal',
@@ -57,8 +58,9 @@ function getStoredPlaybackSettings(): PlaybackSettings {
 }
 
 
-export function VowelActionControls({onPlay}: VowelActionControlsProps) {
+export function VowelActionControls({details, audioUrl}: VowelActionControlsProps) {
     const [playbackSettings, setPlaybackSettings] = useState<PlaybackSettings>(() => getStoredPlaybackSettings());
+    const {audioRef, onPlayHandler} = useVowelAudioPlayback(details, audioUrl, playbackSettings);
     const playbackDescriptionId = 'vowel-action-controls__playback-status';
 
     useEffect(() => {
@@ -99,10 +101,17 @@ export function VowelActionControls({onPlay}: VowelActionControlsProps) {
                 variant="contained"
                 startIcon={<PlayArrowRounded/>}
                 aria-describedby={playbackDescriptionId}
-                onClick={onPlay}
+                onClick={onPlayHandler}
             >
                 Play
             </Button>
+
+            <audio
+                ref={audioRef}
+                src={audioUrl ?? undefined}
+                preload="auto"
+                aria-hidden="true"
+            />
 
             <Paper className="vowel-action-controls__playback-panel" variant="outlined">
                 <Typography className="vowel-action-controls__playback-title" variant="h3">
