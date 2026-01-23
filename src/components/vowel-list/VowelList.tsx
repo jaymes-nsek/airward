@@ -6,6 +6,7 @@ import './VowelList.scss'
 import {useListboxNavigation} from "../../app/shared/a11y/useListboxNavigation.ts";
 import {getVowelOptionId} from "../../app/shared/a11y/listboxIds.ts";
 import clsx from "clsx";
+import {type JSX} from "react";
 
 export type VowelBaseProps = Omit<BoxProps, 'onSelect'> & {
     vowels: VowelDetails[]
@@ -22,7 +23,9 @@ export type VowelLibraryListProps = VowelBaseProps & {
     onSelect: (index: number) => void
 }
 
-
+/**
+ * Intended for use for small device width
+ */
 export function VowelControls({
                                   vowels,
                                   onPrev,
@@ -53,13 +56,55 @@ export function VowelControls({
     )
 }
 
+type VowelListItemProps = {
+    vowel: VowelDetails
+    index: number
+    isSelected: boolean
+    isActive: boolean
+    onSelect: (index: number) => void
+}
+
+function VowelListItem({
+                           vowel,
+                           index,
+                           isSelected,
+                           isActive,
+                           onSelect,
+                       }: VowelListItemProps): JSX.Element {
+    const handleClick = () => onSelect(index)
+
+    return (
+        <Button
+            id={getVowelOptionId(vowel.id)}
+            role="option"
+            aria-selected={isSelected}
+            aria-label={vowel.name}
+            tabIndex={-1} // critical: only the listbox is tabbable
+            className={clsx(
+                'vowel-library__item',
+                isActive && 'vowel-library__item--active',
+            )}
+            variant={isActive ? 'contained' : 'outlined'}
+            color={isActive ? 'primary' : 'inherit'}
+            onClick={handleClick}
+        >
+            {vowel.symbol}
+        </Button>
+    )
+}
+
+VowelListItem.displayName = 'VowelListItem -- displayName test'
+
+/**
+ * Intended for use for medium+ device width (note, this includes table in landscape orientation)
+ */
 export function VowelList({
-                                     vowels,
-                                     selectedIndex,
-                                     isLoading,
-                                     onSelect,
-                                     ...rest
-                                 }: VowelLibraryListProps) {
+                              vowels,
+                              selectedIndex,
+                              isLoading,
+                              onSelect,
+                              ...rest
+                          }: VowelLibraryListProps) {
     const count = vowels.length
 
     const {safeSelectedIndex, onKeyDown} = useListboxNavigation({
@@ -91,29 +136,16 @@ export function VowelList({
             ) : (
                 <>
                     <Box className="vowel-library__grid">
-                        {vowels.map((vowel, index) => {
-                            const isSelected = index === safeSelectedIndex
-
-                            return (
-                                <Button
-                                    key={vowel.id}
-                                    id={getVowelOptionId(vowel.id)}
-                                    role="option"
-                                    aria-selected={isSelected}
-                                    aria-label={vowel.name}
-                                    tabIndex={-1} // critical: only the listbox is tabbable
-                                    className={clsx(
-                                        'vowel-library__item',
-                                        index === selectedIndex && 'vowel-library__item--active'
-                                    )}
-                                    variant={index === selectedIndex ? 'contained' : 'outlined'}
-                                    color={index === selectedIndex ? 'primary' : 'inherit'}
-                                    onClick={() => onSelect(index)}
-                                >
-                                    {vowel.symbol}
-                                </Button>
-                            )
-                        })}
+                        {vowels.map((vowel, index) => (
+                            <VowelListItem
+                                key={vowel.id}
+                                vowel={vowel}
+                                index={index}
+                                isSelected={index === safeSelectedIndex}
+                                isActive={index === selectedIndex}
+                                onSelect={onSelect}
+                            />
+                        ))}
                     </Box>
                 </>
             )}
