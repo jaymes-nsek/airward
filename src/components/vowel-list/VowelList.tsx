@@ -3,8 +3,8 @@ import ArrowBackIosNewRounded from '@mui/icons-material/ArrowBackIosNewRounded'
 import ArrowForwardIosRounded from '@mui/icons-material/ArrowForwardIosRounded'
 import type {VowelDetails} from '../vowel-details/VowelDetails.types.ts'
 import './VowelList.scss'
-import {useListboxNavigation} from "../../shared/a11y/useListboxNavigation.ts";
-import {getVowelOptionId} from "../../shared/a11y/listboxIds.ts";
+import {useListboxNavigation} from "../../app/shared/a11y/useListboxNavigation.ts";
+import {getVowelOptionId} from "../../app/shared/a11y/listboxIds.ts";
 import clsx from "clsx";
 
 export type VowelBaseProps = Omit<BoxProps, 'onSelect'> & {
