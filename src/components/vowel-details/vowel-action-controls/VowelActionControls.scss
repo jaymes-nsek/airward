@@ -5,7 +5,7 @@
 
   &__playback-button{
     text-transform: none;
-    align-self: flex-start;
+    align-self: flex-end; // align-self: flex-start;
     min-width: 120px;
   }
 

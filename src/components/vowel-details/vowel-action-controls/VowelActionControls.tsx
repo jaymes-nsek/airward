@@ -13,10 +13,11 @@ import {
 } from "@mui/material";
 import type {PlaybackSettings, VowelActionControlsProps} from "../VowelDetails.types.ts";
 import {type ReactNode, useEffect, useMemo, useState} from "react";
-import {SpeedRounded} from "@mui/icons-material";
+import SpeedRounded from "@mui/icons-material/SpeedRounded";
 import SlowMotionVideoRounded from "@mui/icons-material/SlowMotionVideoRounded";
 import './VowelActionControls.scss'
 import {useVowelAudioPlayback} from "../hooks/useVowelAudioPlayback.ts";
+import {WaveformScrubber} from "../../../app/shared/audio/components/waveform-scrubber/WaveformScrubber.tsx";
 
 const defaultPlaybackSettings: PlaybackSettings = {
     speed: 'normal',
@@ -90,10 +91,23 @@ export function VowelActionControls({details, audioUrl}: VowelActionControlsProp
             repeatCount: nextValue,
         }));
     };
-    
+
     return (
         <Stack className="vowel-action-controls">
             <h3 className="visually-hidden">Vowel Details Audio Controls</h3>
+
+            <WaveformScrubber
+                audioRef={audioRef}
+                audioUrl={audioUrl}
+                disabled={!audioUrl}
+            />
+
+            <audio
+                ref={audioRef}
+                src={audioUrl ?? undefined}
+                preload="metadata"
+                aria-hidden="true"
+            />
 
             <Button
                 className="vowel-action-controls__playback-button"
@@ -105,13 +119,6 @@ export function VowelActionControls({details, audioUrl}: VowelActionControlsProp
             >
                 Play
             </Button>
-
-            <audio
-                ref={audioRef}
-                src={audioUrl ?? undefined}
-                preload="auto"
-                aria-hidden="true"
-            />
 
             <Paper className="vowel-action-controls__playback-panel" variant="outlined">
                 <Typography className="vowel-action-controls__playback-title" variant="h3">
