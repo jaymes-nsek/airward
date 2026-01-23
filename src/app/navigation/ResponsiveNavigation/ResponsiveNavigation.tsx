@@ -13,9 +13,9 @@ import {
     Toolbar,
 } from '@mui/material'
 import {BrandLogo} from "../../../components/brand-logo/BrandLogo.tsx";
-import type {NavItem} from "../../../App.tsx";
 import "./ResponsiveNavigation.scss"
 import {useNavRouting} from "../useNavRouting.ts";
+import type {NavItem} from "../nav-items.tsx";
 
 type NavKey = 'library' | 'listen' | 'speak' | 'stats'
 
@@ -60,7 +60,7 @@ export function AppBarWrapper({
                               }: AppBarNavProps) {
     const {activeKey, handleNavChange} = useNavRouting(items)
 
-    if (isDesktop)
+    if (isDesktop) {
         return <>
             <AppBar
                 position="fixed"
@@ -88,6 +88,7 @@ export function AppBarWrapper({
                 </Toolbar>
             </AppBar>
         </>
+    }
 
     return (
         <>

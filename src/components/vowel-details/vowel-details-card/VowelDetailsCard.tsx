@@ -1,26 +1,25 @@
-import {Box, type BoxProps, Card,} from '@mui/material'
+import {Card, type CardProps,} from '@mui/material'
 import './VowelDetailsCard.scss'
 import type {VowelDetails} from "../VowelDetails.types.ts";
-import {VowelDetailsCardContent, VowelDetailsCardHeader} from "../VowelDetails.tsx";
+import {VowelDetailsCardHeader} from "../VowelDetailsCardHeader.tsx";
+import {VowelDetailsContent} from "../vowel-details-content/VowelDetailsContent.tsx";
+import clsx from "clsx";
 
-export type VowelDetailsCardProps = BoxProps & {
+
+export type VowelDetailsCardProps = CardProps & {
     vowel: VowelDetails | null
 }
 
 export function VowelDetailsCard({vowel, ...rest}: VowelDetailsCardProps) {
     return (
-        <Box
-            className="vowel-details"
-            {...rest}
-        >
             <Card
-                className="vowel-details__card"
+                {...rest}
+                className={clsx('vowel-details-card__wrapper', rest.className)}
                 elevation={1}
             >
                 <VowelDetailsCardHeader details={vowel}/>
 
-                <VowelDetailsCardContent details={vowel}/>
+                <VowelDetailsContent details={vowel}/>
             </Card>
-        </Box>
     )
 }

@@ -8,10 +8,15 @@ $nav-bar-padding-lg: 12px;
   // min-height: 100vh;
   height: 100vh;
 
-  display: flex;
-  flex-direction: column;
+  /*display: flex;
+  flex-direction: column;*/
+  display: grid;
+  grid-template-rows: max-content 1fr max-content;
 }
 
+h3 {
+  font-weight: 600 !important;
+}
 
 .u-fixed {
   flex: 0 0 auto;
@@ -26,13 +31,17 @@ $nav-bar-padding-lg: 12px;
   margin: auto;
   max-width: 1064px;
   width: 100%;
+  // padding: ($mobile-app-bar-height + $nav-bar-padding-sm) $nav-bar-padding-sm ($bottom-nav-height + $nav-bar-padding-sm);
+  padding: ($mobile-app-bar-height + $nav-bar-padding-sm) $nav-bar-padding-sm 0;
 
-  padding: ($mobile-app-bar-height + $nav-bar-padding-sm) $nav-bar-padding-sm ($bottom-nav-height + $nav-bar-padding-sm);
+  @include media-down(desktop) {
+    padding: ($mobile-app-bar-height + $nav-bar-padding-sm) $nav-bar-padding-sm ($bottom-nav-height + $nav-bar-padding-sm);
+  }
 }
 
 @media (min-width: 601px) {
   .app__main-wrapper {
-    padding: ($mobile-app-bar-height + $nav-bar-padding-lg) $nav-bar-padding-lg  ($bottom-nav-height + $nav-bar-padding-lg);
+    // padding: ($mobile-app-bar-height + $nav-bar-padding-lg) $nav-bar-padding-lg  ($bottom-nav-height + $nav-bar-padding-lg);
   }
 }
 

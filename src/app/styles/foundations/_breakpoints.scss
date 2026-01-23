@@ -21,3 +21,10 @@ $breakpoints: (
     @content;
   }
 }
+
+// Max-width queries
+@mixin media-down($name) {
+  @media (max-width: breakpoint($name)) {
+    @content;
+  }
+}

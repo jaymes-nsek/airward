@@ -1,0 +1,33 @@
+.vowel-action-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &__playback-button{
+    text-transform: none;
+    align-self: flex-start;
+    min-width: 120px;
+  }
+
+  &__playback-panel {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  &__playback-title {
+    margin-bottom: 24px;
+  }
+
+  &__playback-controls {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+
+  &__playback-control {
+    flex: 1 1 calc(50% - 12px); // Requires accounting for the 24px gap to avoid unintended wrapping
+    width: auto !important; // critical
+    min-width: 112px !important; // controls wrapping behaviour
+  }
+}

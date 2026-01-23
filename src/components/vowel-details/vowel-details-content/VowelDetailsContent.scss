@@ -1,0 +1,49 @@
+.vowel-details-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 8px;
+
+  &__examples-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__examples-skeletons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__example {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px;
+    border-radius: 12px;
+  }
+
+  &__example-word {
+    font-weight: 600;
+    text-transform: lowercase;
+  }
+
+  &__example-chip {
+    padding: 4px 8px;
+  }
+
+  &__example-chips {
+    margin-top: 8px;
+    gap: 8px;
+    row-gap: 8px;
+  }
+
+  &__examples {
+    background: transparent;
+  }
+
+  &__examples-body {
+    padding: 12px 0 0;
+  }
+}

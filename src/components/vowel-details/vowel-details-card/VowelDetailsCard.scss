@@ -1,79 +1,8 @@
-.vowel-details {
-    width: 100%;
-}
+.vowel-details-card {
 
-.vowel-details__card {
-    border-radius: 16px;
-}
-
-.vowel-details__header {
-    padding-bottom: 0;
-}
-
-.vowel-details__title {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.vowel-details__symbol {
-    font-weight: 700;
-    line-height: 1.1;
-}
-
-.vowel-details__content {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    padding-top: 8px;
-}
-
-.vowel-details__divider {
-    margin: 4px 0 0;
-}
-
-.vowel-details__examples {
-    background: transparent;
-}
-
-.vowel-details__examples-summary {
-    padding: 0 4px;
-    min-height: auto;
-}
-
-.vowel-details__examples-summary .MuiAccordionSummary-content {
-    margin: 0;
-}
-
-.vowel-details__examples-body {
-    padding: 12px 0 0;
-}
-
-.vowel-details__example {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.vowel-details__example-word {
-    font-weight: 600;
-    text-transform: lowercase;
-}
-
-.vowel-details__example-chips {
-    row-gap: 8px;
-}
-
-.vowel-details-controls {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    &__button {
-        text-transform: none;
-        flex: 1 1 0; // equal widths
-        min-width: 84px !important; // avoids overflow from long labels
+    &__wrapper {
+        width: 100%;
+        height: max-content;
+        border-radius: 16px;
     }
 }
-
-

@@ -25,8 +25,6 @@ export type VowelDetails = {
 
 export type VowelActionControlsProps = {
     onPlay?: () => void
-    onReplay?: () => void
-    onSlow?: () => void
 }
 
 
@@ -34,4 +32,9 @@ export interface VowelProps {
     details: VowelDetails | null;
     // onToggleFavourite?: () => void;
     examples?: VowelExample[];
+}
+
+export type PlaybackSettings = {
+    speed: 'normal' | 'slow'
+    repeatCount: 1 | 2 | 3 | 4 | 5
 }
