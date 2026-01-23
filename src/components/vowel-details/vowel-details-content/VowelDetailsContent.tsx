@@ -10,41 +10,33 @@ import {
     Stack,
     Typography
 } from "@mui/material";
-import type {VowelProps} from "../VowelDetails.types.ts";
-import {useGetVowelAudio} from "../hooks/useGetVowelAudio.ts";
-import {VowelActionControls} from "../vowel-action-controls/VowelActionControls.tsx";
 import './VowelDetailsContent.scss';
+import type {VowelDetails, VowelStateProps} from "../VowelDetails.types.ts";
+import {getVowelFromIndex} from "../../../app/shared/utils/vowel-details.utils.ts";
 
 
 /**
  * @param details The selected vowel
  */
-export function VowelDetailsContent({details}: VowelProps) {
-    const {audioUrl, error} = useGetVowelAudio(details?.id);
-
-    if (error) {
-        console.error('VowelDetailsCardContent ERR:', error);
-    }
+export function VowelDetailsContent({vowelState}: VowelStateProps) {
+    const selectedVowel: VowelDetails | null = getVowelFromIndex(vowelState);
 
     return (
         <CardContent className="vowel-details-content">
-            {/*disabled={!audioUrl}*/}
-            <>
-                <VowelActionControls audioUrl={audioUrl} details={details}/>
-                {/*{error && <p role="alert">{error}</p>}*/}
-            </>
-
             {/*<Divider className="vowel-details-content__divider"/>*/}
 
-            <Accordion className="vowel-details-content__examples" elevation={0} disableGutters defaultExpanded>
+            <Accordion
+                className="vowel-details-content__examples"
+                elevation={0} disableGutters defaultExpanded
+            >
                 <AccordionSummary expandIcon={<ExpandMoreRounded/>}>
                     <Typography variant="h3">Examples</Typography>
                 </AccordionSummary>
 
                 <AccordionDetails className="vowel-details-content__examples-body">
                     <Stack className="vowel-details-content__examples-list">
-                        {details ? (
-                            details.examples.map((example) => (
+                        {selectedVowel ? (
+                            selectedVowel.examples.map((example) => (
                                 <Paper
                                     key={example.word}
                                     className="vowel-details-content__example"

@@ -6,18 +6,15 @@ import {VowelDetailsCard} from '../../../components/vowel-details/vowel-details-
 import {VowelControls, VowelList} from '../../../components/vowel-list/VowelList.tsx'
 import './VowelLibraryPage.scss'
 import {finalize} from "rxjs";
+import type {VowelLibraryState} from "./vowel-library.types.ts";
 
-export type VowelLibraryState = {
-    vowels: VowelDetails[]
-    selectedIndex: number
-}
 
 export function VowelLibraryPage() {
     const [vowelLibState, setVowelLibState] = useState<VowelLibraryState>({vowels: [], selectedIndex: 0})
     const [isLoadingState, setIsLoadingState] = useState(true)
 
     useEffect(() => {
-        console.log('effect mount');
+        // console.log('effect mount');
 
         const subscription = vowelLibraryService
             .getVowelList()
@@ -38,17 +35,10 @@ export function VowelLibraryPage() {
             });
 
         return () => {
-            console.log('effect cleanup: unsubscribe');
+            // console.log('effect cleanup: unsubscribe');
             subscription.unsubscribe()
         }
     }, [])
-
-    // Instantiate the selected vowel
-    let selectedVowel: VowelDetails | null = null;
-
-    if (vowelLibState.vowels.length) {
-        selectedVowel = vowelLibState.vowels[vowelLibState.selectedIndex] ?? vowelLibState.vowels[0];
-    }
 
     //region Handlers
     const handleSelect = (index: number) => {
@@ -113,7 +103,7 @@ export function VowelLibraryPage() {
             >
                 <VowelDetailsCard
                     className="u-fill"
-                    vowel={selectedVowel}/>
+                    vowelState={vowelLibState}/>
 
                 <VowelControls
                     className="vowel-library-page__controls u-fixed"

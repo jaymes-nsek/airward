@@ -1,3 +1,7 @@
+import type {CardProps, SelectChangeEvent} from "@mui/material";
+import type {VowelLibraryState} from "../../app/pages/vowel-library-page/vowel-library.types.ts";
+
+
 export type PronunciationDialects = 'BrE' | 'AmE'
 
 export interface Pronunciation {
@@ -23,18 +27,18 @@ export type VowelDetails = {
     examples: VowelExample[]
 }
 
-export type VowelActionControlsProps = {
-    details: VowelDetails | null;
-    audioUrl: string | null;
-    onPlay?: () => void
+export interface VowelStateProps {
+    vowelState: VowelLibraryState | null;
 }
 
+export type VowelDetailsCardProps = CardProps & VowelStateProps;
 
-export interface VowelProps {
-    details: VowelDetails | null;
-    // onToggleFavourite?: () => void;
-    examples?: VowelExample[];
+export type PlaybackSettingsPanelProps = {
+    settings: PlaybackSettings
+    onSpeedChange: (event: SelectChangeEvent<PlaybackSettings['speed']>) => void
+    onRepeatChange: (event: SelectChangeEvent<PlaybackSettings['repeatCount']>) => void
 }
+
 
 export type PlaybackSettings = {
     speed: 'normal' | 'slow'

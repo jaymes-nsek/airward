@@ -11,13 +11,20 @@ import {
     Stack,
     Typography
 } from "@mui/material";
-import type {PlaybackSettings, VowelActionControlsProps} from "../VowelDetails.types.ts";
-import {type ReactNode, useEffect, useMemo, useState} from "react";
+import type {
+    PlaybackSettings,
+    PlaybackSettingsPanelProps,
+    VowelDetails,
+    VowelStateProps
+} from "../VowelDetails.types.ts";
+import {type JSX, memo, type ReactNode, useEffect, useMemo, useState} from "react";
 import SpeedRounded from "@mui/icons-material/SpeedRounded";
 import SlowMotionVideoRounded from "@mui/icons-material/SlowMotionVideoRounded";
 import './VowelActionControls.scss'
 import {useVowelAudioPlayback} from "../hooks/useVowelAudioPlayback.ts";
 import {WaveformScrubber} from "../../../app/shared/audio/components/waveform-scrubber/WaveformScrubber.tsx";
+import {useGetVowelAudio} from "../hooks/useGetVowelAudio.ts";
+import {getVowelFromIndex} from "../../../app/shared/utils/vowel-details.utils.ts";
 
 const defaultPlaybackSettings: PlaybackSettings = {
     speed: 'normal',
@@ -59,10 +66,93 @@ function getStoredPlaybackSettings(): PlaybackSettings {
 }
 
 
-export function VowelActionControls({details, audioUrl}: VowelActionControlsProps) {
+function PlaybackSettingsPanel({
+                                   settings,
+                                   onSpeedChange,
+                                   onRepeatChange
+                               }: PlaybackSettingsPanelProps): JSX.Element {
+    return (
+        <Paper className="vowel-action-controls__playback-panel" variant="outlined">
+            <Typography className="vowel-action-controls__playback-title" variant="h3">
+                Playback settings
+            </Typography>
+
+            <Stack className="vowel-action-controls__playback-controls">
+                <FormControl
+                    variant="standard"
+                    className="vowel-action-controls__playback-control"
+                    size="small"
+                >
+                    <InputLabel id="vowel-details-playback-speed-label">Speed</InputLabel>
+
+                    <Select
+                        labelId="vowel-details-playback-speed-label"
+                        value={settings.speed}
+                        label="Speed"
+                        inputProps={{'aria-label': 'Playback speed'}}
+                        onChange={onSpeedChange}
+                    >
+                        {playbackSpeedOptions.map((option) => (
+                            <MenuItem
+                                key={option.value}
+                                value={option.value}
+                                aria-label={`Speed: ${option.label}${settings.speed === option.value ? ', selected' : ''}`}
+                            >
+                                <ListItemText primary={option.label}/>
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+
+                <FormControl
+                    className="vowel-action-controls__playback-control"
+                    size="small"
+                    variant="standard"
+                >
+                    <InputLabel id="vowel-details-playback-repeat-label">Repeat</InputLabel>
+
+                    <Select
+                        labelId="vowel-details-playback-repeat-label"
+                        value={settings.repeatCount}
+                        label="Repeat"
+                        inputProps={{'aria-label': 'Repeat playback count'}}
+                        onChange={onRepeatChange}
+                    >
+                        {repeatCountOptions.map((count) => (
+                            <MenuItem
+                                key={count}
+                                value={count}
+                                aria-label={`Repeat playback count: ${count}${settings.repeatCount === count ? ', selected' : ''}`}
+                            >
+                                <ListItemText primary={`${count}x`}/>
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+            </Stack>
+        </Paper>
+    )
+}
+
+const PlaybackSettingsPanelMemo = memo(
+    PlaybackSettingsPanel,
+    (prev, next) =>
+        prev.settings.speed === next.settings.speed &&
+        prev.settings.repeatCount === next.settings.repeatCount
+);
+
+
+export function VowelActionControls({vowelState}: VowelStateProps) {
+    const details: VowelDetails | null = getVowelFromIndex(vowelState);
+
     const [playbackSettings, setPlaybackSettings] = useState<PlaybackSettings>(() => getStoredPlaybackSettings());
+    const {audioUrl, error} = useGetVowelAudio(details?.id);
     const {audioRef, onPlayHandler} = useVowelAudioPlayback(details, audioUrl, playbackSettings);
     const playbackDescriptionId = 'vowel-action-controls__playback-status';
+
+    if (error) {
+        console.error('VowelDetailsCardContent ERR:', error);
+    }
 
     useEffect(() => {
         if (typeof window === 'undefined') {
@@ -120,65 +210,10 @@ export function VowelActionControls({details, audioUrl}: VowelActionControlsProp
                 Play
             </Button>
 
-            <Paper className="vowel-action-controls__playback-panel" variant="outlined">
-                <Typography className="vowel-action-controls__playback-title" variant="h3">
-                    Playback settings
-                </Typography>
-
-                <Stack className="vowel-action-controls__playback-controls">
-                    <FormControl
-                        variant="standard"
-                        className="vowel-action-controls__playback-control"
-                        size="small"
-                    >
-                        <InputLabel id="vowel-details-playback-speed-label">Speed</InputLabel>
-
-                        <Select
-                            labelId="vowel-details-playback-speed-label"
-                            value={playbackSettings.speed}
-                            label="Speed"
-                            inputProps={{'aria-label': 'Playback speed'}}
-                            onChange={handleSpeedChange}
-                        >
-                            {playbackSpeedOptions.map((option) => (
-                                <MenuItem
-                                    key={option.value}
-                                    value={option.value}
-                                    aria-label={`Speed: ${option.label}${playbackSettings.speed === option.value ? ', selected' : ''}`}
-                                >
-                                    {/*<ListItemIcon>{option.icon}</ListItemIcon>*/}
-                                    <ListItemText primary={option.label}/>
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-
-                    <FormControl className="vowel-action-controls__playback-control" size="small" variant="standard">
-                        <InputLabel id="vowel-details-playback-repeat-label">Repeat</InputLabel>
-
-                        <Select
-                            labelId="vowel-details-playback-repeat-label"
-                            value={playbackSettings.repeatCount}
-                            label="Repeat"
-                            inputProps={{'aria-label': 'Repeat playback count'}}
-                            onChange={handleRepeatChange}
-                        >
-                            {repeatCountOptions.map((count) => (
-                                <MenuItem
-                                    key={count}
-                                    value={count}
-                                    aria-label={`Repeat playback count: ${count}${playbackSettings.repeatCount === count ? ', selected' : ''}`}
-                                >
-                                    {/*<ListItemIcon>
-                                        <ReplayRounded fontSize="small"/>
-                                    </ListItemIcon>*/}
-                                    <ListItemText primary={`${count}x`}/>
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </Stack>
-            </Paper>
+            <PlaybackSettingsPanelMemo
+                settings={playbackSettings}
+                onSpeedChange={handleSpeedChange}
+                onRepeatChange={handleRepeatChange}/>
 
             <Typography
                 id={playbackDescriptionId}
