@@ -1,22 +1,31 @@
 import {useCallback, useMemo} from 'react'
 import {useLocation, useNavigate} from 'react-router-dom'
-import type {NavItem} from "../../App.tsx";
+import type {NavItem, NavKey} from "./nav-items.tsx";
 
-export function useNavRouting<NavKey extends string>(
-    items: ReadonlyArray<NavItem<NavKey>>,
+export function useNavRouting(
+    items: ReadonlyArray<NavItem>,
 ) {
     const navigate = useNavigate()
     const location = useLocation()
 
     const keyByPath = useMemo(() => {
-        const map = new Map<string, NavKey>()
-        for (const item of items) map.set(item.to, item.key)
-        return map
-    }, [items])
+            const map = new Map<string, NavKey>();
+
+            for (const item of items) {
+                map.set(item.to, item.key)
+            }
+
+            return map
+        }, [items]
+    )
 
     const pathByKey = useMemo(() => {
-        const map = new Map<NavKey, string>()
-        for (const item of items) map.set(item.key, item.to)
+        const map = new Map<NavKey, string>();
+
+        for (const item of items) {
+            map.set(item.key, item.to)
+        }
+
         return map
     }, [items])
 
@@ -28,7 +37,10 @@ export function useNavRouting<NavKey extends string>(
     const handleNavChange = useCallback(
         (newKey: NavKey) => {
             const to = pathByKey.get(newKey)
-            if (to && to !== location.pathname) navigate(to)
+
+            if (to && to !== location.pathname) {
+                navigate(to)
+            }
         },
         [pathByKey, navigate, location.pathname],
     )
