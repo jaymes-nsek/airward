@@ -1,6 +1,5 @@
-import {type RefObject, useCallback, useRef} from "react";
+import {type RefObject, useCallback, useEffect, useRef} from "react";
 import type {PlaybackSettings, VowelDetails} from "../VowelDetails.types.ts";
-
 
 export interface UseVowelAudioPlaybackResult {
     audioRef: RefObject<HTMLAudioElement | null>;
@@ -14,52 +13,95 @@ export function useVowelAudioPlayback(
 ): UseVowelAudioPlaybackResult {
     const audioRef = useRef<HTMLAudioElement>(null);
 
-    // Promise-based delay for introducing pause between looped replays (i.e. repeat modifier >1)
-    const delay = (ms: number) =>
-        new Promise<void>(resolve => setTimeout(resolve, ms));
+    // Monotonically increasing token; any async continuation checks it before doing work.
+    const sessionIdRef = useRef(0);
+
+    // Track pending timeout so we can cancel the inter-repeat delay.
+    const timeoutIdRef = useRef<number | null>(null);
+
+    const cancelPlayback = useCallback(() => {
+        // Invalidate any in-flight async handlers (e.g. after awaiting delay).
+        sessionIdRef.current += 1;
+
+        // Clear pending delay between repeats.
+        if (timeoutIdRef.current !== null) {
+            window.clearTimeout(timeoutIdRef.current);
+            timeoutIdRef.current = null;
+        }
+
+        const audioEl = audioRef.current;
+        if (!audioEl) {
+            return;
+        }
+
+        // Stop audio and detach handler.
+        audioEl.onended = null;
+        audioEl.pause();
+        audioEl.currentTime = 0;
+    }, []);
+
+    // Cancel whenever the "identity" of the playing item changes.
+    useEffect(() => {
+        cancelPlayback();
+    }, [cancelPlayback, audioUrl, selectedVowel?.id]);
 
     const onPlayHandler = useCallback((): void => {
-            if (!selectedVowel && !audioUrl) {
-                return;
-            }
+        if (!audioUrl) {
+            return; // audioUrl is the true precondition for playback.
+        }
 
-            const audioEl = audioRef.current;
+        const audioEl = audioRef.current;
 
-            if (!audioEl) {
-                return;
-            }
+        if (!audioEl) {
+            return;
+        }
 
-            // Defensive reset: to ensure replay always starts from the beginning
-            //  - Avoids "already playing" edge cases in Firefox/Safari
-            audioEl.pause();
-            audioEl.currentTime = 0;
-            audioEl.onended = null;
-            audioEl.playbackRate = playbackSettings.speed === 'slow' ? 0.5 : 1;
+        // Start a fresh session and hard-cancel any previous chain.
+        cancelPlayback();
+        const sessionId = sessionIdRef.current;
 
-            if (playbackSettings.repeatCount > 1) {
-                let remaining = playbackSettings.repeatCount;
+        audioEl.playbackRate = playbackSettings.speed === 'slow' ? 0.5 : 1;
+        audioEl.currentTime = 0;
 
-                audioEl.onended = async () => {
-                    remaining -= 1;
+        if (playbackSettings.repeatCount > 1) {
+            let remaining = playbackSettings.repeatCount;
 
-                    if (remaining > 0) {
-                        await delay(500);
+            audioEl.onended = () => {
+                // Ignore stale callbacks from prior sessions.
+                if (sessionIdRef.current !== sessionId) {
+                    return;
+                }
 
-                        audioEl.currentTime = 0;
-                        void audioEl.play();
-                    } else {
-                        audioEl.onended = null;
+                remaining -= 1;
+
+                if (remaining <= 0) {
+                    audioEl.onended = null;
+                    return;
+                }
+
+                // Inter-repeat delay that can be cancelled.
+                timeoutIdRef.current = window.setTimeout(() => {
+                    timeoutIdRef.current = null;
+
+                    if (sessionIdRef.current !== sessionId) {
+                        return;
                     }
-                };
-            }
 
-            void audioEl.play().catch((err: unknown) => {
-                // Browsers can reject play() if not user-initiated
-                // This handler *is* user-initiated, so this is mostly for diagnostics
-                console.error("Audio playback failed:", err);
-            });
-        }, [selectedVowel, audioUrl, playbackSettings]
-    );
+                    audioEl.currentTime = 0;
+                    void audioEl.play().catch((err: unknown) => {
+                        // If play fails mid-chain, cancel everything to avoid repeated failures.
+                        console.error('Audio playback failed:', err);
+                        cancelPlayback();
+                    });
+                }, 500);
+            };
+        }
+
+        void audioEl.play().catch((err: unknown) => {
+            console.error('Audio playback failed:', err);
+            cancelPlayback();
+        });
+    }, [audioUrl, cancelPlayback, playbackSettings.repeatCount, playbackSettings.speed]);
 
     return {audioRef, onPlayHandler};
 }
