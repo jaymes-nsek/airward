@@ -2,7 +2,7 @@ import {map, Observable, of} from "rxjs";
 import {BaseService} from './BaseService.ts'
 import type {HttpClient} from "../app/api/http/HttpClient.ts";
 import {ApiError, type ApiSuccess, isApiError} from "../app/api/contracts/ApiContracts";
-import type {VowelDetails} from "../components/vowel-details/VowelDetails.types.ts";
+import type {VowelDetails} from "../components/vowels/models/vowel.types.ts";
 import {apiRoutes} from "../app/api/routes/AppApiRoutes.ts";
 
 export interface AudioCacheEntry {

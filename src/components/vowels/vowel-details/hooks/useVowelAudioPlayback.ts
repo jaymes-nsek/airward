@@ -1,9 +1,16 @@
 import {type RefObject, useCallback, useEffect, useRef} from "react";
-import type {PlaybackSettings, VowelDetails} from "../VowelDetails.types.ts";
+import type {VowelDetails} from "../../models/vowel.types.ts";
+import type {PlaybackSettings} from "../../models/playback.types.ts";
 
 export interface UseVowelAudioPlaybackResult {
     audioRef: RefObject<HTMLAudioElement | null>;
     onPlayHandler: () => void;
+}
+
+function isAbortError(err: unknown): boolean {
+    return (
+        err instanceof DOMException && err.name === 'AbortError'
+    );
 }
 
 export function useVowelAudioPlayback(
@@ -98,6 +105,11 @@ export function useVowelAudioPlayback(
         }
 
         void audioEl.play().catch((err: unknown) => {
+            if (isAbortError(err)) {
+                // Expected when we cancel playback (pause) during rapid changes.
+                return;
+            }
+
             console.error('Audio playback failed:', err);
             cancelPlayback();
         });

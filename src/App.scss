@@ -27,6 +27,19 @@ h3 {
   min-height: 0; // critical for nested scrolling
 }
 
+.u-no-select {
+  // Prevent text selection (cross-browser)
+  -webkit-touch-callout: none; // iOS Safari: disable callout menu
+  -webkit-user-select: none;   // Safari/older Chrome
+  -moz-user-select: none;      // Older Firefox
+  -ms-user-select: none;       // IE/Edge (legacy)
+  user-select: none;           // Modern browsers
+
+  // Optional niceties for touch UIs
+  // -webkit-tap-highlight-color: transparent;
+}
+
+
 .app__main-wrapper {
   margin: auto;
   max-width: 1064px;

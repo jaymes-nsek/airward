@@ -12,16 +12,13 @@ import {
     Typography
 } from "@mui/material";
 import './VowelDetailsContent.scss';
-import type {VowelDetails, VowelStateProps} from "../VowelDetails.types.ts";
-import {getVowelFromIndex} from "../../../app/shared/utils/vowel-details.utils.ts";
+import type {VowelBaseProps} from "../../models/vowel-playback-props.types.ts";
 
 
 /**
  * @param details The selected vowel
  */
-export function VowelDetailsContent({vowelState}: VowelStateProps) {
-    const selectedVowel: VowelDetails | null = getVowelFromIndex(vowelState);
-
+export function VowelDetailsContent({selectedVowel}: VowelBaseProps) {
     return (
         <CardContent className="vowel-details-content">
             <Divider className="vowel-details-content__divider"/>

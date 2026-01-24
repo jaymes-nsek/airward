@@ -1,12 +1,9 @@
 import "./VowelDetailsCardHeader.scss"
 import {Box, CardHeader, Skeleton, Typography} from "@mui/material";
-import type {VowelDetails, VowelStateProps} from "../VowelDetails.types.ts";
-import {getVowelFromIndex} from "../../../app/shared/utils/vowel-details.utils.ts";
+import type {VowelBaseProps} from "../../models/vowel-playback-props.types.ts";
 
 
-export function VowelDetailsCardHeader({vowelState}: VowelStateProps) {
-    const selectedVowel: VowelDetails | null = getVowelFromIndex(vowelState);
-
+export function VowelDetailsCardHeader({selectedVowel}: VowelBaseProps) {
     return (
         <CardHeader
             className="vowel-details-header"

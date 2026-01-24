@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import type {Observable} from "rxjs";
 import {catchError, map, of, startWith} from "rxjs";
-import {vowelLibraryService} from "../../../services/VowelLibraryService.ts";
+import {vowelLibraryService} from "../../../../services/VowelLibraryService.ts";
 
 //region Interfaces
 

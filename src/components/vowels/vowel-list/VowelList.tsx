@@ -1,37 +1,28 @@
 import {Box, type BoxProps, Button, CircularProgress, Typography} from '@mui/material'
 import ArrowBackIosNewRounded from '@mui/icons-material/ArrowBackIosNewRounded'
 import ArrowForwardIosRounded from '@mui/icons-material/ArrowForwardIosRounded'
-import type {VowelDetails} from '../vowel-details/VowelDetails.types.ts'
 import './VowelList.scss'
-import {useListboxNavigation} from "../../app/shared/a11y/useListboxNavigation.ts";
-import {getVowelOptionId} from "../../app/shared/a11y/listboxIds.ts";
+import {useListboxNavigation} from "../../../app/shared/a11y/useListboxNavigation.ts";
+import {getVowelOptionId} from "../../../app/shared/a11y/listboxIds.ts";
 import clsx from "clsx";
 import {type JSX} from "react";
+import type {
+    VowelControlsProps,
+    VowelListProps,
+    VowelListItemProps
+} from "../models/vowel-playback-props.types.ts";
 
-export type VowelBaseProps = Omit<BoxProps, 'onSelect'> & {
-    vowels: VowelDetails[]
-}
-
-export type VowelControlsProps = VowelBaseProps & {
-    onPrev: () => void
-    onNext: () => void
-}
-
-export type VowelLibraryListProps = VowelBaseProps & {
-    selectedIndex: number
-    isLoading: boolean
-    onSelect: (index: number) => void
-}
+type VowelSmallWidthControlsProps = BoxProps & VowelControlsProps;
 
 /**
  * Intended for use for small device width
  */
 export function VowelSmallWidthControls({
-                                  vowels,
-                                  onPrev,
-                                  onNext,
-                                  ...rest
-                              }: VowelControlsProps) {
+                                            vowels,
+                                            onPrev,
+                                            onNext,
+                                            ...rest
+                                        }: VowelSmallWidthControlsProps) {
     return (
         <Box className="vowel-list__controls" {...rest}>
             <Button
@@ -56,22 +47,18 @@ export function VowelSmallWidthControls({
     )
 }
 
-type VowelListItemProps = {
-    vowel: VowelDetails
-    index: number
-    isSelected: boolean
-    isActive: boolean
-    onSelect: (index: number) => void
-}
-
 function VowelListItem({
                            vowel,
                            index,
                            isSelected,
                            isActive,
                            onSelect,
+                           onPlayHandler
                        }: VowelListItemProps): JSX.Element {
-    const handleClick = () => onSelect(index)
+    const handleClick = () => {
+        onSelect(index);
+        onPlayHandler(); // pointer activation: select + play
+    };
 
     return (
         <Button
@@ -103,8 +90,9 @@ export function VowelList({
                               selectedIndex,
                               isLoading,
                               onSelect,
+                              onPlayHandler,
                               ...rest
-                          }: VowelLibraryListProps) {
+                          }: VowelListProps) {
     const count = vowels.length
 
     const {safeSelectedIndex, onKeyDown} = useListboxNavigation({
@@ -112,11 +100,35 @@ export function VowelList({
         selectedIndex,
         onSelect,
         wrap: true,
-        confirmOnSpaceEnter: false,
+        confirmOnSpaceEnter: false, // handle Enter/Space explicitly here
     })
 
     const activeDescendant =
         safeSelectedIndex >= 0 ? getVowelOptionId(vowels[safeSelectedIndex].id) : undefined
+
+    const keyDownHandler: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
+        // Let the navigation hook handle arrows/home/end etc.
+        onKeyDown(e as never);
+
+        if (count === 0) {
+            return;
+        }
+
+        // Only play/confirm on explicit activation keys.
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+
+            // Commit selection to the currently active descendant.
+            if (safeSelectedIndex >= 0) {
+                onSelect(safeSelectedIndex);
+            }
+
+            // Then play (single explicit intent).
+            if (onPlayHandler) {
+                onPlayHandler();
+            }
+        }
+    };
 
     return (
         <Box className="vowel-list"
@@ -125,7 +137,7 @@ export function VowelList({
              aria-label="Vowel library"
              aria-activedescendant={activeDescendant}
              aria-busy={isLoading || undefined}
-             onKeyDown={onKeyDown}
+             onKeyDown={keyDownHandler}
              {...rest}
         >
             {isLoading ? (
@@ -141,9 +153,10 @@ export function VowelList({
                                 key={vowel.id}
                                 vowel={vowel}
                                 index={index}
-                                isSelected={index === safeSelectedIndex}
-                                isActive={index === selectedIndex}
+                                isSelected={index === selectedIndex} // aria-selected tracks committed selection
+                                isActive={index === safeSelectedIndex} // isActive tracks roving highlight
                                 onSelect={onSelect}
+                                onPlayHandler={onPlayHandler}
                             />
                         ))}
                     </Box>

@@ -1,5 +1,6 @@
-import type {VowelDetails} from "../../../components/vowel-details/VowelDetails.types.ts";
-import type {VowelLibraryState} from "../../pages/vowel-library-page/VowelLibraryPage.tsx";
+import type {VowelLibraryState} from "../../pages/vowel-library-page/vowel-library.types.ts";
+import type {VowelDetails} from "../../../components/vowels/models/vowel.types.ts";
+
 
 export function getVowelFromIndex(vowelState: VowelLibraryState | null) {
     let selectedVowel: VowelDetails | null = null;
