@@ -1,7 +1,7 @@
 import {Card,} from '@mui/material'
 import './VowelDetailsCard.scss'
 import type {VowelDetailsCardProps} from "../VowelDetails.types.ts";
-import {VowelDetailsCardHeader} from "../VowelDetailsCardHeader.tsx";
+import {VowelDetailsCardHeader} from "../vowel-details-header/VowelDetailsCardHeader.tsx";
 import {VowelDetailsContent} from "../vowel-details-content/VowelDetailsContent.tsx";
 import clsx from "clsx";
 import {VowelActionControls} from "../vowel-action-controls/VowelActionControls.tsx";

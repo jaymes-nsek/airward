@@ -3,7 +3,7 @@ import {Box} from '@mui/material'
 import {vowelLibraryService} from '../../../services/VowelLibraryService.ts'
 import type {VowelDetails} from '../../../components/vowel-details/VowelDetails.types.ts'
 import {VowelDetailsCard} from '../../../components/vowel-details/vowel-details-card/VowelDetailsCard.tsx'
-import {VowelControls, VowelList} from '../../../components/vowel-list/VowelList.tsx'
+import {VowelSmallWidthControls, VowelList} from '../../../components/vowel-list/VowelList.tsx'
 import './VowelLibraryPage.scss'
 import {finalize} from "rxjs";
 import type {VowelLibraryState} from "./vowel-library.types.ts";
@@ -105,7 +105,7 @@ export function VowelLibraryPage() {
                     className="u-fill"
                     vowelState={vowelLibState}/>
 
-                <VowelControls
+                <VowelSmallWidthControls
                     className="vowel-library-page__controls u-fixed"
                     vowels={vowelLibState.vowels}
                     onPrev={handlePrev}

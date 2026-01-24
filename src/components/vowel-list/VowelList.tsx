@@ -26,16 +26,16 @@ export type VowelLibraryListProps = VowelBaseProps & {
 /**
  * Intended for use for small device width
  */
-export function VowelControls({
+export function VowelSmallWidthControls({
                                   vowels,
                                   onPrev,
                                   onNext,
                                   ...rest
                               }: VowelControlsProps) {
     return (
-        <Box className="vowel-library__controls" {...rest}>
+        <Box className="vowel-list__controls" {...rest}>
             <Button
-                className="vowel-library__control"
+                className="vowel-list__control"
                 variant="outlined"
                 startIcon={<ArrowBackIosNewRounded/>}
                 onClick={onPrev}
@@ -44,7 +44,7 @@ export function VowelControls({
                 Prev
             </Button>
             <Button
-                className="vowel-library__control"
+                className="vowel-list__control"
                 variant="outlined"
                 endIcon={<ArrowForwardIosRounded/>}
                 onClick={onNext}
@@ -81,8 +81,8 @@ function VowelListItem({
             aria-label={vowel.name}
             tabIndex={-1} // critical: only the listbox is tabbable
             className={clsx(
-                'vowel-library__item',
-                isActive && 'vowel-library__item--active',
+                'vowel-list__item',
+                isActive && 'vowel-list__item--active',
             )}
             variant={isActive ? 'contained' : 'outlined'}
             color={isActive ? 'primary' : 'inherit'}
@@ -119,7 +119,7 @@ export function VowelList({
         safeSelectedIndex >= 0 ? getVowelOptionId(vowels[safeSelectedIndex].id) : undefined
 
     return (
-        <Box className="vowel-library"
+        <Box className="vowel-list"
              role="listbox"
              tabIndex={0}
              aria-label="Vowel library"
@@ -129,13 +129,13 @@ export function VowelList({
              {...rest}
         >
             {isLoading ? (
-                <Box className="vowel-library__loading">
+                <Box className="vowel-list__loading">
                     <CircularProgress size={28}/>
                     <Typography variant="body2">Loading vowels...</Typography>
                 </Box>
             ) : (
                 <>
-                    <Box className="vowel-library__grid">
+                    <Box className="vowel-list__grid">
                         {vowels.map((vowel, index) => (
                             <VowelListItem
                                 key={vowel.id}

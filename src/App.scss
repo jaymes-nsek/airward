@@ -31,6 +31,13 @@ h3 {
   margin: auto;
   max-width: 1064px;
   width: 100%;
+
+  // todo: Note this does not currently work as intend, because it is derived from 1fr from #root
+  // Force 100%, derived from #root -- which is in effect Viewport, plus 24px;
+  // so that scroll bar is always visible to avoid CLS for different content height,
+  // such as VowelDetailsCard
+  height: calc(100% + 24px);
+
   // padding: ($mobile-app-bar-height + $nav-bar-padding-sm) $nav-bar-padding-sm ($bottom-nav-height + $nav-bar-padding-sm);
   padding: ($mobile-app-bar-height + $nav-bar-padding-sm) $nav-bar-padding-sm 0;
 

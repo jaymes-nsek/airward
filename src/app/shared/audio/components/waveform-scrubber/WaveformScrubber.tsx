@@ -25,12 +25,10 @@ function formatMmSs(totalSeconds: number): string {
 }
 
 export function WaveformScrubber({audioRef, audioUrl, disabled, showTime}: WaveformScrubberProps) {
-    const theme = useTheme();
-
     const containerRef = useRef<HTMLDivElement | null>(null);
     const waveSurferRef = useRef<WaveSurfer | null>(null);
-
     const [duration, setDuration] = useState(0);
+    const theme = useTheme();
 
     const displayedDuration = useMemo(() => {
         // When no audio is selected, display 0:00 without mutating state in an effect.
@@ -42,6 +40,8 @@ export function WaveformScrubber({audioRef, audioUrl, disabled, showTime}: Wavef
     }, [audioUrl, duration]);
 
     const timeLabel = useMemo(() => formatMmSs(displayedDuration), [displayedDuration]);
+
+    const WAVEFORM_H = 44;
 
     useEffect(() => {
         // If we cannot bind yet, just no-op.
@@ -70,7 +70,7 @@ export function WaveformScrubber({audioRef, audioUrl, disabled, showTime}: Wavef
             waveColor: theme.palette.action.disabled,
             progressColor: theme.palette.primary.main,
             cursorColor: theme.palette.primary.main,
-            height: 44,
+            height: WAVEFORM_H,
             barWidth: 2,
             barGap: 2,
             barRadius: 2,
@@ -124,6 +124,7 @@ export function WaveformScrubber({audioRef, audioUrl, disabled, showTime}: Wavef
                 className="waveform-scrubber__waveform-canvas"
                 ref={containerRef}
                 aria-label="Audio waveform scrubber"
+                sx={{height: WAVEFORM_H}}
             />
 
             {showTime && (

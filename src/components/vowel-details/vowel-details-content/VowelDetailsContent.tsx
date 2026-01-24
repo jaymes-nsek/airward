@@ -5,6 +5,7 @@ import {
     AccordionSummary,
     CardContent,
     Chip,
+    Divider,
     Paper,
     Skeleton,
     Stack,
@@ -23,7 +24,7 @@ export function VowelDetailsContent({vowelState}: VowelStateProps) {
 
     return (
         <CardContent className="vowel-details-content">
-            {/*<Divider className="vowel-details-content__divider"/>*/}
+            <Divider className="vowel-details-content__divider"/>
 
             <Accordion
                 className="vowel-details-content__examples"

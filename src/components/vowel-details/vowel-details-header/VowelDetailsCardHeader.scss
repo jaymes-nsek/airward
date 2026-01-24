@@ -1,0 +1,11 @@
+.vowel-details-header {
+
+  &__title {
+    height: 64px /*MinHeight at 64 to allow header to be generously spread on two lines and avoid layout shift*/
+  }
+
+  &__skeleton {
+    width: 100%;
+    height: 64px;
+  }
+}
