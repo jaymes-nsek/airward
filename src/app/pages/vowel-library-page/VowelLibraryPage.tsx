@@ -156,7 +156,7 @@ export function VowelLibraryPage() {
     return (
         <Box component="article" className="vowel-library-page">
             <Box component="section" className="vowel-library-page__list">
-                <h2 id="vowel-list-heading" className="visually-hidden">Vowel List</h2>
+                <h2 id="vowel-list-heading" className="visually-hidden">Interactive vowel list with audio playback</h2>
 
                 <VowelList
                     className="u-fill"

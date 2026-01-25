@@ -1,8 +1,77 @@
-import {type RefObject, useEffect, useMemo, useRef, useState} from 'react';
+import './WaveformScrubber.scss'
+import {memo, type RefObject, useEffect, useMemo, useRef, useState} from 'react';
 import WaveSurfer from 'wavesurfer.js';
 import type {WaveSurferOptions} from 'wavesurfer.js';
 import {Box} from '@mui/material';
 import {useTheme} from '@mui/material/styles';
+
+const WAVEFORM_H = 44;
+const WAVEFORM_AND_TIME_H = 68;
+
+
+/**
+ * Formats a duration for visual display and accessibility.
+ *
+ * Visual output:
+ * - Zero-padded HH:MM:SS
+ * - Based on whole seconds (fractional part discarded)
+ *
+ * A11y label:
+ * - Seconds rounded down to 2 decimal places
+ *
+ * @param totalSec Duration in seconds.
+ */
+function formatDurationHhMmSs(totalSec: number): {
+    display: string;
+    a11yLabel: string;
+} {
+    console.log('formatDuration', totalSec);
+
+    if (!Number.isFinite(totalSec)) {
+        return {
+            display: '00:00:00',
+            a11yLabel: '0 seconds',
+        };
+    }
+
+    const clamped = Math.max(0, totalSec);
+
+    const a11ySeconds = Math.floor(clamped * 100) / 100;
+    const wholeSeconds = Math.floor(clamped);
+
+    const h = Math.floor(wholeSeconds / 3600);
+    const m = Math.floor((wholeSeconds % 3600) / 60);
+    const s = wholeSeconds % 60;
+
+    return {
+        display: `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`,
+        a11yLabel: `${a11ySeconds.toFixed(2)} seconds`,
+    };
+}
+
+
+type WaveformTimeProps = {
+    a11yLabel: string;
+};
+
+const WaveformTimeMemo = memo(
+    function WaveformTime({
+                              a11yLabel,
+                          }: WaveformTimeProps) {
+        return (
+            <Box
+                className="waveform-scrubber__waveform-time"
+                role="status"
+                aria-label="Duration of selected vowel audio"
+                aria-atomic="false"
+            >
+                {a11yLabel}
+            </Box>
+        );
+    },
+    (prevProps, nextProps) => prevProps.a11yLabel === nextProps.a11yLabel
+);
+
 
 export type WaveformScrubberProps = {
     /** Must be the *same* audio element used by your play logic */
@@ -14,34 +83,23 @@ export type WaveformScrubberProps = {
     showTime?: boolean;
 };
 
-function formatMmSs(totalSeconds: number): string {
-    if (!Number.isFinite(totalSeconds) || totalSeconds < 0) {
-        return '0:00';
-    }
-    const whole = Math.floor(totalSeconds);
-    const m = Math.floor(whole / 60);
-    const s = whole % 60;
-    return `${m}:${String(s).padStart(2, '0')}`;
-}
-
 export function WaveformScrubber({audioRef, audioUrl, disabled, showTime}: WaveformScrubberProps) {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const waveSurferRef = useRef<WaveSurfer | null>(null);
     const [duration, setDuration] = useState(0);
     const theme = useTheme();
 
-    const displayedDuration = useMemo(() => {
+    const {a11yLabel} = useMemo(() => {
         // When no audio is selected, display 0:00 without mutating state in an effect.
         if (!audioUrl) {
-            return 0;
+            return {
+                display: '00:00:00',
+                a11yLabel: '0 seconds',
+            };
         }
 
-        return duration;
+        return formatDurationHhMmSs(duration);
     }, [audioUrl, duration]);
-
-    const timeLabel = useMemo(() => formatMmSs(displayedDuration), [displayedDuration]);
-
-    const WAVEFORM_H = 44;
 
     useEffect(() => {
         // If we cannot bind yet, just no-op.
@@ -75,7 +133,10 @@ export function WaveformScrubber({audioRef, audioUrl, disabled, showTime}: Wavef
             barGap: 2,
             barRadius: 2,
             normalize: true,
-            interact: !disabled,
+            //region make waveform non-interactive (unclickable / non-draggable) while still seekable programmatically
+            interact: false,
+            dragToSeek: false
+            //endregion
         };
 
         const ws = WaveSurfer.create(options);
@@ -119,7 +180,10 @@ export function WaveformScrubber({audioRef, audioUrl, disabled, showTime}: Wavef
     }, [audioRef, audioUrl, disabled, theme.palette.action.disabled, theme.palette.primary.main]);
 
     return (
-        <Box className="waveform-scrubber__waveform" aria-hidden={false}>
+        <Box
+            className="waveform-scrubber__waveform"
+            sx={{height: WAVEFORM_AND_TIME_H}}
+        >
             <Box
                 className="waveform-scrubber__waveform-canvas"
                 ref={containerRef}
@@ -128,12 +192,7 @@ export function WaveformScrubber({audioRef, audioUrl, disabled, showTime}: Wavef
             />
 
             {showTime && (
-                <Box
-                    className="waveform-scrubber__waveform-time"
-                    aria-live="off"
-                >
-                    {timeLabel}
-                </Box>
+                <WaveformTimeMemo a11yLabel={a11yLabel}/>
             )}
         </Box>
     );

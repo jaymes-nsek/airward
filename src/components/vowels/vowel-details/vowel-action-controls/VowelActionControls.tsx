@@ -1,13 +1,13 @@
 import PlayArrowRounded from '@mui/icons-material/PlayArrowRounded'
 import {
+    Box,
     Button,
     FormControl,
     InputLabel,
     ListItemText,
     MenuItem,
     Paper,
-    Select,
-    Skeleton,
+    Select, Skeleton,
     Stack,
     Typography
 } from "@mui/material";
@@ -19,6 +19,7 @@ import {WaveformScrubber} from "../../../../app/shared/audio/components/waveform
 import {playbackStorageKey, repeatCountOptions} from "./vowel-actions-controls.constants.ts";
 import type {PlaybackSettings} from "../../models/playback.types.ts";
 import type {PlaybackSettingsPanelProps, VowelPlaybackBaseProps} from "../../models/vowel-playback-props.types.ts";
+import {useEvent} from "../../../../app/shared/hooks/useEvent.ts";
 
 
 const playbackSpeedOptions: Array<{ value: PlaybackSettings['speed']; label: string; icon: ReactNode }> = [
@@ -103,6 +104,34 @@ const PlaybackSettingsPanelMemo = memo(
 );
 
 
+export type PlayButtonProps = {
+    playbackDescriptionId?: string;
+    onPlayHandler: () => void;
+    // disabled: boolean;
+};
+
+export const PlayButtonMemo = memo(function PlayButton({
+                                                           playbackDescriptionId,
+                                                           onPlayHandler,
+                                                       }: PlayButtonProps) {
+        return (
+            <Button
+                className="vowel-action-controls__playback-button"
+                size="small"
+                variant="contained"
+                startIcon={<PlayArrowRounded/>}
+                aria-describedby={playbackDescriptionId}
+                onClick={onPlayHandler}
+                // disabled={disabled}
+            >
+                Play
+            </Button>
+        );
+    },
+    () => true // prev, next
+);
+
+
 export const VowelActionControlsMemo = memo(function VowelActionControls({
                                                                              playbackSettings,
                                                                              audioUrl,
@@ -111,14 +140,10 @@ export const VowelActionControlsMemo = memo(function VowelActionControls({
                                                                              onSpeedChange,
                                                                              onRepeatChange
                                                                          }: VowelPlaybackBaseProps) {
-        // const details: VowelDetails | null = getVowelFromIndex(vowelState);
         const disablePlay = !audioUrl;
         console.log('audioUrl', audioUrl);
 
         const playbackDescriptionId = 'vowel-action-controls__playback-status';
-
-        // const audioRef = audioPlayback.audioRef.current
-        // const onPlayHandler = () => audioPlayback.onPlayHandler()
 
         useEffect(() => {
             if (typeof window === 'undefined') {
@@ -133,18 +158,26 @@ export const VowelActionControlsMemo = memo(function VowelActionControls({
             return `Playback settings: speed ${speedLabel}, repeat ${playbackSettings.repeatCount}x.`;
         }, [playbackSettings]);
 
+        // Use memo to pass a stable onPlay ref to PlayButtonMemo whilst pointing each new onPlayHandler to it;
+        // This prevents PlayBtn from rapid unmount/mount, which looks janky
+        const stableOnPlay = useEvent(onPlayHandler);
+
         return (
-            disablePlay ?
-                // TODO: Simple skeleton for now, can be extended later!
-                <Skeleton variant="rectangular" width={'100%'} height={237.01}/> // Current the fixed height of setting is 237px
-                :
-                <Stack className="vowel-action-controls">
-                    <h3 className="visually-hidden">Vowel Details Audio Controls</h3>
+            <Box className="vowel-action-controls" aria-busy={disablePlay}>
+                <Stack
+                    className="vowel-action-controls__stack"
+                    sx={{
+                        visibility: disablePlay ? 'hidden' : 'visible',
+                        pointerEvents: disablePlay ? 'none' : 'auto',
+                    }}
+                >
+                    <h3 className="visually-hidden">Play vowel audio</h3>
 
                     <WaveformScrubber
                         audioRef={audioRef}
                         audioUrl={audioUrl}
                         disabled={disablePlay}
+                        showTime
                     />
 
                     <audio
@@ -154,30 +187,33 @@ export const VowelActionControlsMemo = memo(function VowelActionControls({
                         aria-hidden="true"
                     />
 
-                    <Button
-                        className="vowel-action-controls__playback-button"
-                        size="small"
-                        variant="contained"
-                        startIcon={<PlayArrowRounded/>}
-                        aria-describedby={playbackDescriptionId}
-                        onClick={onPlayHandler}
-                        disabled={disablePlay}
-                    >
-                        Play
-                    </Button>
+                    {
+                        <PlayButtonMemo
+                            playbackDescriptionId={playbackDescriptionId}
+                            onPlayHandler={stableOnPlay}
+                            // disabled={disablePlay}
+                        />
+                    }
 
                     <PlaybackSettingsPanelMemo
                         settings={playbackSettings}
                         onSpeedChange={onSpeedChange}
-                        onRepeatChange={onRepeatChange}/>
+                        onRepeatChange={onRepeatChange}
+                    />
 
-                    <Typography
-                        id={playbackDescriptionId}
-                        className="visually-hidden"
-                    >
+                    <Typography id={playbackDescriptionId} className="visually-hidden">
                         {playbackDescription}
                     </Typography>
                 </Stack>
-        )
+
+                {disablePlay && (
+                    <Skeleton
+                        className="vowel-action-controls__skeleton"
+                        variant="rectangular"
+                    />
+                )}
+            </Box>
+        );
+
     }
 )

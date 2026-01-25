@@ -1,9 +1,21 @@
 .vowel-action-controls {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  position: relative;
 
-  &__playback-button{
+  &__stack {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__skeleton {
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    width: 100%;
+    height: 260.88px; // Set to match the fixed height of 260.88px which vowel-action-controls sums to
+  }
+
+  &__playback-button {
     text-transform: none;
     align-self: flex-end; // align-self: flex-start;
     min-width: 120px;
