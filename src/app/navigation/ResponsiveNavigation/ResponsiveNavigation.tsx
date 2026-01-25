@@ -4,20 +4,17 @@ import {
     type AppBarProps,
     BottomNavigation,
     BottomNavigationAction,
+    type BottomNavigationProps,
     Box,
     type BoxProps,
-    Paper,
-    type PaperProps,
     Tab,
     Tabs,
     Toolbar,
 } from '@mui/material'
 import {BrandLogo} from "../../../components/brand-logo/BrandLogo.tsx";
 import "./ResponsiveNavigation.scss"
-import {useNavRouting} from "../useNavRouting.ts";
-import type {NavItem} from "../nav-items.tsx";
-
-type NavKey = 'library' | 'listen' | 'speak' | 'stats'
+import {type NavItem} from "../nav-items.tsx";
+import {NavLink} from "react-router-dom";
 
 type MainNavProps = BoxProps & {
     children: ReactNode
@@ -28,9 +25,21 @@ type AppBarNavProps = AppBarProps & {
     items: NavItem[]
 }
 
-type BottomNavigationNavProps = PaperProps & {
+type BottomNavigationNavProps = BottomNavigationProps & {
     isDesktop: boolean
     items: NavItem[]
+}
+
+function getActiveTo(pathname: string, items: NavItem[],): string | false {
+    // Determine which tab is active by matching the current URL.
+    // This supports nested routes (e.g. /library/123 still highlights /library).
+    return (
+        items.find(
+            (item) =>
+                pathname === item.to ||
+                pathname.startsWith(`${item.to}/`),
+        )?.to ?? false
+    );
 }
 
 const APP_BAR_HEIGHT = 72
@@ -58,7 +67,7 @@ export function AppBarWrapper({
                                   items,
                                   ...rest
                               }: AppBarNavProps) {
-    const {activeKey, handleNavChange} = useNavRouting(items)
+    const activeTo = getActiveTo(location.pathname, items);
 
     if (isDesktop) {
         return <>
@@ -69,39 +78,42 @@ export function AppBarWrapper({
                 {...rest}
             >
                 <Toolbar sx={{gap: 3, px: {xs: 2, lg: 4}, minHeight: APP_BAR_HEIGHT}}>
-                    <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5}}>
-                        <BrandLogo/>
-                    </Box>
+                    <BrandLogo/>
 
-                    <Tabs
-                        value={activeKey}
-                        onChange={(_, newKey: NavKey) => handleNavChange(newKey)}
-                        sx={{minHeight: APP_BAR_HEIGHT}}
-                    >
-                        {items.map((item) => (
-                            <Tab
-                                key={item.key}
-                                label={item.label}
-                                value={item.key}/>
-                        ))}
-                    </Tabs>
+                    <Box component="nav" aria-label="Primary navigation"
+                         sx={{minHeight: APP_BAR_HEIGHT, display: 'flex'}}>
+                        <Tabs
+                            value={activeTo}
+                            sx={{minHeight: APP_BAR_HEIGHT}}
+                        >
+                            {items.map((item) => (
+                                <Tab
+                                    key={item.key}
+                                    label={item.label}
+                                    value={item.to}
+                                    component={NavLink}
+                                    to={item.to}
+                                    // Ensures correct active behaviour if nested routes are used in future
+                                    end={item.to === '/'}
+                                />
+                            ))}
+                        </Tabs>
+                    </Box>
                 </Toolbar>
             </AppBar>
         </>
     }
 
     return (
-        <>
-            <AppBar
-                position="fixed"
-                elevation={4}
-                {...rest}
-            >
-                <Toolbar sx={{minHeight: MOBILE_APP_BAR_HEIGHT}}>
-                    <BrandLogo height={28}/>
-                </Toolbar>
-            </AppBar>
-        </>
+        <AppBar
+            position="fixed"
+            elevation={4}
+            {...rest}
+        >
+            <Toolbar sx={{minHeight: MOBILE_APP_BAR_HEIGHT}}>
+                <BrandLogo height={28}/>
+            </Toolbar>
+        </AppBar>
     )
 }
 
@@ -111,32 +123,32 @@ export function BottomNavWrapper({
                                      items,
                                      ...rest
                                  }: BottomNavigationNavProps) {
-    const {activeKey, handleNavChange} = useNavRouting(items)
-
     if (isDesktop) {
         return <> </>
     }
 
-    return <>
-        <Paper
+    const activeTo = getActiveTo(location.pathname, items);
+
+    return (
+        <BottomNavigation
+            component="nav"
+            aria-label="Primary navigation"
+            showLabels
+            value={activeTo}
+            sx={{height: BOTTOM_NAV_HEIGHT}}
             elevation={8}
             {...rest}
         >
-            <BottomNavigation
-                showLabels
-                value={activeKey}
-                onChange={(_, newKey: NavKey) => handleNavChange(newKey)}
-                sx={{height: BOTTOM_NAV_HEIGHT}}
-            >
-                {items.map((item) => (
-                    <BottomNavigationAction
-                        key={item.key}
-                        label={item.label}
-                        icon={item.icon}
-                        value={item.key}
-                    />
-                ))}
-            </BottomNavigation>
-        </Paper>
-    </>
+            {items.map((item) => (
+                <BottomNavigationAction
+                    key={item.key}
+                    label={item.label}
+                    icon={item.icon}
+                    value={item.to}
+                    component={NavLink}
+                    to={item.to}
+                />
+            ))}
+        </BottomNavigation>
+    )
 }

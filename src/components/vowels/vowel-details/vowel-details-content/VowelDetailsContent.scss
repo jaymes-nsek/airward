@@ -10,6 +10,7 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+    background: transparent;
   }
 
   &__examples-skeletons {
@@ -39,10 +40,6 @@
     margin-top: 8px;
     gap: 8px;
     row-gap: 8px;
-  }
-
-  &__examples {
-    background: transparent;
   }
 
   &__examples-body {

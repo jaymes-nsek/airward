@@ -13,9 +13,16 @@ export type NavItem = {
     to: string
 }
 
+export const PAGES_NAV_ROUTES = {
+    LIBRARY: '/library',
+    LISTEN: '/listen',
+    SPEAK: '/speak',
+    STATS: '/stats',
+}
+
 export const navItems: NavItem[] = [
-    {key: 'library', label: 'Library', icon: <MenuBookRounded/>, to: '/library'},
-    {key: 'listen', label: 'Listen', icon: <HeadphonesRounded/>, to: '/listen'},
-    {key: 'speak', label: 'Speak', icon: <MicRounded/>, to: '/speak'},
-    {key: 'stats', label: 'Stats', icon: <InsightsRounded/>, to: '/stats'},
+    {key: 'library', label: 'Library', icon: <MenuBookRounded/>, to: PAGES_NAV_ROUTES.LIBRARY},
+    {key: 'listen', label: 'Listen', icon: <HeadphonesRounded/>, to: PAGES_NAV_ROUTES.LISTEN},
+    {key: 'speak', label: 'Speak', icon: <MicRounded/>, to: PAGES_NAV_ROUTES.SPEAK},
+    {key: 'stats', label: 'Stats', icon: <InsightsRounded/>, to: PAGES_NAV_ROUTES.STATS},
 ]

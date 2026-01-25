@@ -16,7 +16,7 @@ export function VowelDetailsCardHeader({selectedVowel}: VowelBaseProps) {
                             sx={{
                                 color: 'primary.main'
                             }}
-                            aria-label={selectedVowel.name}
+                            aria-label={`Vowel Details — ${selectedVowel.name}`}
                         >
                             {selectedVowel.symbol} &mdash; {selectedVowel.name}
                         </Typography>

@@ -3,6 +3,7 @@ import {
     Accordion,
     AccordionDetails,
     AccordionSummary,
+    Box,
     CardContent,
     Chip,
     Divider,
@@ -32,28 +33,31 @@ export function VowelDetailsContent({selectedVowel}: VowelBaseProps) {
                 </AccordionSummary>
 
                 <AccordionDetails className="vowel-details-content__examples-body">
-                    <Stack className="vowel-details-content__examples-list">
-                        {selectedVowel ? (
-                            selectedVowel.examples.map((example) => (
+                    {selectedVowel ?
+                        <Box
+                            component="ul"
+                            className="vowel-details-content__examples-list"
+                            sx={{listStyle: 'none', p: 0, m: 0}}
+                        >
+                            {selectedVowel.examples.map((example) => (
                                 <Paper
                                     key={example.word}
+                                    component="li"
                                     className="vowel-details-content__example"
                                     elevation={0}
                                     variant="outlined"
                                 >
-                                    <Stack direction="row" alignItems="center" justifyContent="space-between">
-                                        <Typography
-                                            className="vowel-details-content__example-word"
-                                            variant="h4"
-                                            sx={{color: 'primary.main'}}
-                                        >
-                                            {example.word}
-                                        </Typography>
-
-                                        {/*<IconButton size="small" aria-label="open example">
-                                            <ChevronRightRounded fontSize="small"/>
-                                        </IconButton>*/}
-                                    </Stack>
+                                    <Typography
+                                        component="span"
+                                        className="vowel-details-content__example-word"
+                                        variant="body1"
+                                        sx={{
+                                            color: 'primary.main',
+                                            fontWeight: 600,
+                                        }}
+                                    >
+                                        {example.word}
+                                    </Typography>
 
                                     <Stack
                                         className="vowel-details-content__example-chips"
@@ -62,8 +66,8 @@ export function VowelDetailsContent({selectedVowel}: VowelBaseProps) {
                                     >
                                         {example.pronunciations.map((pronunciation) => (
                                             <Chip
-                                                className="vowel-details-content__example-chip"
                                                 key={`${example.word}-${pronunciation.dialect}`}
+                                                className="vowel-details-content__example-chip"
                                                 size="medium"
                                                 variant="outlined"
                                                 label={`${pronunciation.dialect}: ${pronunciation.ipa}`}
@@ -71,15 +75,15 @@ export function VowelDetailsContent({selectedVowel}: VowelBaseProps) {
                                         ))}
                                     </Stack>
                                 </Paper>
-                            ))
-                        ) : (
-                            <Stack className="vowel-details-content__examples-skeletons">
-                                {[0, 1, 2].map((item) => (
-                                    <Skeleton key={item} variant="rounded" height={64}/>
-                                ))}
-                            </Stack>
-                        )}
-                    </Stack>
+                            ))}
+                        </Box>
+                        :
+                        <Stack className="vowel-details-content__examples-skeletons">
+                            {[0, 1, 2].map((item) => (
+                                <Skeleton key={item} variant="rounded" height={64}/>
+                            ))}
+                        </Stack>
+                    }
                 </AccordionDetails>
             </Accordion>
         </CardContent>

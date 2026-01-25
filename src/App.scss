@@ -18,27 +18,9 @@ h3 {
   font-weight: 600 !important;
 }
 
-.u-fixed {
-  flex: 0 0 auto;
+span {
+  font-size: 0.8em;
 }
-
-.u-fill {
-  flex: 1 1 auto; // takes remaining space
-  min-height: 0; // critical for nested scrolling
-}
-
-.u-no-select {
-  // Prevent text selection (cross-browser)
-  -webkit-touch-callout: none; // iOS Safari: disable callout menu
-  -webkit-user-select: none;   // Safari/older Chrome
-  -moz-user-select: none;      // Older Firefox
-  -ms-user-select: none;       // IE/Edge (legacy)
-  user-select: none;           // Modern browsers
-
-  // Optional niceties for touch UIs
-  // -webkit-tap-highlight-color: transparent;
-}
-
 
 .app__main-wrapper {
   margin: auto;
@@ -70,3 +52,35 @@ h3 {
     padding: ($app-bar-height + $nav-bar-padding-lg) $nav-bar-padding-lg $nav-bar-padding-lg;
   }
 }
+
+//region Utilities
+.u-fixed {
+  flex: 0 0 auto;
+}
+
+.u-fill {
+  flex: 1 1 auto; // takes remaining space
+  min-height: 0; // critical for nested scrolling
+}
+
+.u-no-select {
+  // Prevent text selection (cross-browser)
+  -webkit-touch-callout: none; // iOS Safari: disable callout menu
+  -webkit-user-select: none;   // Safari/older Chrome
+  -moz-user-select: none;      // Older Firefox
+  -ms-user-select: none;       // IE/Edge (legacy)
+  user-select: none;           // Modern browsers
+
+  // Optional niceties for touch UIs
+  // -webkit-tap-highlight-color: transparent;
+}
+
+.u--readonly {
+  // Read-only / non-interactive container
+  pointer-events: none;              // blocks mouse/touch/pointer interactions
+  -webkit-user-select: none;         // Safari
+  user-select: none;                 // modern browsers
+  -webkit-touch-callout: none;       // iOS Safari: disables callout menu
+  // touch-action: none;                // prevents scrolling/zoom gestures on supported touch devices
+}
+//endregion

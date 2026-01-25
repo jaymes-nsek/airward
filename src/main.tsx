@@ -3,7 +3,7 @@ import {createRoot} from 'react-dom/client'
 import './index.scss'
 import {theme} from './theme';
 import {CssBaseline, ThemeProvider} from "@mui/material";
-import {AppRouter} from "./app/providers/AppRouter.tsx";
+import {AppRouter} from "./AppRouter.tsx";
 import {StyledEngineProvider} from "@mui/material/styles";
 
 

@@ -156,8 +156,11 @@ export function VowelLibraryPage() {
     return (
         <Box component="article" className="vowel-library-page">
             <Box component="section" className="vowel-library-page__list">
+                <h2 id="vowel-list-heading" className="visually-hidden">Vowel List</h2>
+
                 <VowelList
                     className="u-fill"
+                    aria-labelledby="vowel-list-heading"
                     vowels={vowelLibState.vowels}
                     selectedIndex={vowelLibState.selectedIndex}
                     isLoading={isLoadingState}
