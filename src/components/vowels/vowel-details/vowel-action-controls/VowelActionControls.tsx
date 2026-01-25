@@ -15,7 +15,7 @@ import {type JSX, memo, type ReactNode, useEffect, useMemo} from "react";
 import SpeedRounded from "@mui/icons-material/SpeedRounded";
 import SlowMotionVideoRounded from "@mui/icons-material/SlowMotionVideoRounded";
 import './VowelActionControls.scss'
-import {WaveformScrubber} from "../../../../app/shared/audio/components/waveform-scrubber/WaveformScrubber.tsx";
+import {WaveformScrubber} from "../../../audio/waveform-scrubber/WaveformScrubber.tsx";
 import {playbackStorageKey, repeatCountOptions} from "./vowel-actions-controls.constants.ts";
 import type {PlaybackSettings} from "../../models/playback.types.ts";
 import type {PlaybackSettingsPanelProps, VowelPlaybackBaseProps} from "../../models/vowel-playback-props.types.ts";

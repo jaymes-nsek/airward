@@ -5,16 +5,15 @@
   flex-direction: column;
   gap: 16px;
 
-  &__loading {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    color: #475569;
-  }
 
-  &__grid {
+  &__grid-list {
     display: none;
     gap: 12px;
+
+    //region Override default ul margin and padding
+    margin: 0;
+    padding: 0;
+    //endregion
 
     @include media-up(tablet) {
       display: grid;
@@ -23,16 +22,32 @@
 
     @include media-up(desktop) {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(84px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
     }
   }
 
+  &__loading {
+    height: 240px;
+    width: 100%;
+    z-index: 1;
+  }
+
   &__item {
+    //region Override default li styles
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    //endregion
+  }
+
+  &__item-button {
     justify-content: center;
     text-transform: lowercase !important;
     font-weight: 200;
     border-radius: 10px;
-    min-height: 44px;
+    min-height: 48px;
+    min-width: 64px;
+    width: 100%;
 
     &--active {
       box-shadow: 0 6px 16px rgba(30, 58, 138, 0.18);

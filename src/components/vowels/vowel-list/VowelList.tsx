@@ -1,16 +1,13 @@
-import {Box, type BoxProps, Button, CircularProgress, Typography} from '@mui/material'
+import {Box, type BoxProps, Button, Skeleton} from '@mui/material'
 import ArrowBackIosNewRounded from '@mui/icons-material/ArrowBackIosNewRounded'
 import ArrowForwardIosRounded from '@mui/icons-material/ArrowForwardIosRounded'
 import './VowelList.scss'
 import {useListboxNavigation} from "../../../app/shared/a11y/useListboxNavigation.ts";
 import {getVowelOptionId} from "../../../app/shared/a11y/listboxIds.ts";
 import clsx from "clsx";
-import {type JSX} from "react";
-import type {
-    VowelControlsProps,
-    VowelListProps,
-    VowelListItemProps
-} from "../models/vowel-playback-props.types.ts";
+import {type JSX, type KeyboardEventHandler} from "react";
+import type {VowelControlsProps, VowelListItemProps, VowelListProps} from "../models/vowel-playback-props.types.ts";
+import {VisibilityGate} from "../../visibility-gate/VisibilityGate.tsx";
 
 type VowelSmallWidthControlsProps = BoxProps & VowelControlsProps;
 
@@ -61,26 +58,32 @@ function VowelListItem({
     };
 
     return (
-        <Button
-            id={getVowelOptionId(vowel.id)}
-            role="option"
-            aria-selected={isSelected}
-            aria-label={vowel.name}
-            tabIndex={-1} // critical: only the listbox is tabbable
-            className={clsx(
-                'vowel-list__item',
-                isActive && 'vowel-list__item--active',
-            )}
-            variant={isActive ? 'contained' : 'outlined'}
-            color={isActive ? 'primary' : 'inherit'}
-            onClick={handleClick}
+        <Box
+            component="li"
+            role="none"
+            className="vowel-list__item"
         >
-            {vowel.symbol}
-        </Button>
+            <Button
+                id={getVowelOptionId(vowel.id)}
+                role="option"
+                aria-selected={isSelected}
+                aria-label={vowel.name}
+                tabIndex={-1} // critical: only the listbox is tabbable
+                className={clsx(
+                    'vowel-list__item-button',
+                    isActive && 'vowel-list__item-button--active',
+                )}
+                variant={isActive ? 'contained' : 'outlined'}
+                color={isActive ? 'primary' : 'inherit'}
+                onClick={handleClick}
+            >
+                {vowel.symbol}
+            </Button>
+        </Box>
     )
 }
 
-VowelListItem.displayName = 'VowelListItem -- displayName test'
+VowelListItem.displayName = 'VowelListItem'
 
 /**
  * Intended for use for medium+ device width (note, this includes table in landscape orientation)
@@ -106,7 +109,7 @@ export function VowelList({
     const activeDescendant =
         safeSelectedIndex >= 0 ? getVowelOptionId(vowels[safeSelectedIndex].id) : undefined
 
-    const keyDownHandler: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
+    const keyDownHandler: KeyboardEventHandler<HTMLDivElement> = (e) => {
         // Let the navigation hook handle arrows/home/end etc.
         onKeyDown(e as never);
 
@@ -131,37 +134,41 @@ export function VowelList({
     };
 
     return (
-        <Box className="vowel-list"
-             role="listbox"
-             tabIndex={0}
-             aria-label="Vowel library"
-             aria-activedescendant={activeDescendant}
-             aria-busy={isLoading || undefined}
-             onKeyDown={keyDownHandler}
-             {...rest}
-        >
-            {isLoading ? (
-                <Box className="vowel-list__loading">
-                    <CircularProgress size={28}/>
-                    <Typography variant="body2">Loading vowels...</Typography>
-                </Box>
-            ) : (
-                <>
-                    <Box className="vowel-list__grid">
-                        {vowels.map((vowel, index) => (
-                            <VowelListItem
-                                key={vowel.id}
-                                vowel={vowel}
-                                index={index}
-                                isSelected={index === selectedIndex} // aria-selected tracks committed selection
-                                isActive={index === safeSelectedIndex} // isActive tracks roving highlight
-                                onSelect={onSelect}
-                                onPlayHandler={onPlayHandler}
-                            />
-                        ))}
-                    </Box>
-                </>
+        <>
+            {isLoading && (
+                <Skeleton
+                    className="vowel-list__loading"
+                    variant="rectangular"
+                    aria-hidden="true"
+                />
             )}
-        </Box>
+
+            <VisibilityGate hidden={isLoading} className="vowel-list">
+                <Box
+                    component="ul"
+                    role="listbox"
+                    tabIndex={0}
+                    aria-label="Vowel library"
+                    aria-activedescendant={activeDescendant}
+                    aria-busy={isLoading || undefined}
+                    onKeyDown={keyDownHandler}
+                    {...rest}
+                    className={clsx('vowel-list__grid-list', rest.className)}
+                >
+                    {vowels.map((vowel, index) => (
+                        <VowelListItem
+                            key={vowel.id}
+                            vowel={vowel}
+                            index={index}
+                            isSelected={index === selectedIndex} // aria-selected tracks committed selection
+                            isActive={index === safeSelectedIndex} // isActive tracks roving highlight
+                            onSelect={onSelect}
+                            onPlayHandler={onPlayHandler}
+                        />
+                    ))}
+
+                </Box>
+            </VisibilityGate>
+        </>
     )
 }

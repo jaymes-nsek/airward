@@ -63,7 +63,7 @@ const WaveformTimeMemo = memo(
                 className="waveform-scrubber__waveform-time"
                 role="status"
                 aria-label="Duration of selected vowel audio"
-                aria-atomic="false"
+                aria-atomic="true"
             >
                 {a11yLabel}
             </Box>
