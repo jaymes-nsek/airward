@@ -13,7 +13,7 @@ export function VisibilityGate({
                                }: VisibilityGateProps) {
     return (
         <div
-            aria-hidden="true" // Placed first so ...rest, that follows, is the source of true
+            aria-hidden={hidden} // Placed first so ...rest, that follows, is the source of true
             {...rest}
             style={{
                 visibility: hidden ? 'hidden' : 'visible',

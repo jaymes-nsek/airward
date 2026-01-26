@@ -7,7 +7,8 @@ import {
     ListItemText,
     MenuItem,
     Paper,
-    Select, Skeleton,
+    Select,
+    Skeleton,
     Stack,
     Typography
 } from "@mui/material";
@@ -27,19 +28,30 @@ const playbackSpeedOptions: Array<{ value: PlaybackSettings['speed']; label: str
     {value: 'slow', label: 'Slow', icon: <SlowMotionVideoRounded fontSize="small"/>},
 ];
 
+const playbackDescriptionId = 'vowel-action-controls__playback-status';
 
 function PlaybackSettingsPanel({
-                                   settings,
+                                   playbackSettings,
                                    onSpeedChange,
                                    onRepeatChange
                                }: PlaybackSettingsPanelProps): JSX.Element {
+    const playbackDescription = useMemo(() => {
+        const speedLabel = playbackSettings.speed === 'slow' ? 'Slow' : 'Normal';
+        return `Playback settings: speed ${speedLabel}, repeat ${playbackSettings.repeatCount}x.`;
+    }, [playbackSettings]);
+
     return (
-        <Paper className="vowel-action-controls__playback-panel" variant="outlined">
+        <Paper className="vowel-action-controls__playback-panel"
+               variant="outlined"
+        >
             <Typography className="vowel-action-controls__playback-title u-no-select" variant="h3">
                 Playback settings
             </Typography>
 
-            <Stack className="vowel-action-controls__playback-controls">
+            <Stack
+                className="vowel-action-controls__playback-controls"
+                aria-describedby={playbackDescriptionId}
+            >
                 <FormControl
                     variant="standard"
                     className="vowel-action-controls__playback-control"
@@ -49,7 +61,7 @@ function PlaybackSettingsPanel({
 
                     <Select
                         labelId="vowel-details-playback-speed-label"
-                        value={settings.speed}
+                        value={playbackSettings.speed}
                         label="Speed"
                         inputProps={{'aria-label': 'Playback speed'}}
                         onChange={onSpeedChange}
@@ -58,7 +70,7 @@ function PlaybackSettingsPanel({
                             <MenuItem
                                 key={option.value}
                                 value={option.value}
-                                aria-label={`Speed: ${option.label}${settings.speed === option.value ? ', selected' : ''}`}
+                                aria-label={`Speed: ${option.label}${playbackSettings.speed === option.value ? ', selected' : ''}`}
                             >
                                 <ListItemText primary={option.label}/>
                             </MenuItem>
@@ -75,7 +87,7 @@ function PlaybackSettingsPanel({
 
                     <Select
                         labelId="vowel-details-playback-repeat-label"
-                        value={settings.repeatCount}
+                        value={playbackSettings.repeatCount}
                         label="Repeat"
                         inputProps={{'aria-label': 'Repeat playback count'}}
                         onChange={onRepeatChange}
@@ -84,7 +96,7 @@ function PlaybackSettingsPanel({
                             <MenuItem
                                 key={count}
                                 value={count}
-                                aria-label={`Repeat playback count: ${count}${settings.repeatCount === count ? ', selected' : ''}`}
+                                aria-label={`Repeat playback count: ${count}${playbackSettings.repeatCount === count ? ', selected' : ''}`}
                             >
                                 <ListItemText primary={`${count}x`}/>
                             </MenuItem>
@@ -92,6 +104,10 @@ function PlaybackSettingsPanel({
                     </Select>
                 </FormControl>
             </Stack>
+
+            <Typography id={playbackDescriptionId} className="visually-hidden">
+                {playbackDescription}
+            </Typography>
         </Paper>
     )
 }
@@ -99,19 +115,17 @@ function PlaybackSettingsPanel({
 const PlaybackSettingsPanelMemo = memo(
     PlaybackSettingsPanel,
     (prev, next) =>
-        prev.settings.speed === next.settings.speed &&
-        prev.settings.repeatCount === next.settings.repeatCount
+        prev.playbackSettings.speed === next.playbackSettings.speed &&
+        prev.playbackSettings.repeatCount === next.playbackSettings.repeatCount
 );
 
 
 export type PlayButtonProps = {
-    playbackDescriptionId?: string;
     onPlayHandler: () => void;
     // disabled: boolean;
 };
 
 export const PlayButtonMemo = memo(function PlayButton({
-                                                           playbackDescriptionId,
                                                            onPlayHandler,
                                                        }: PlayButtonProps) {
         return (
@@ -120,7 +134,7 @@ export const PlayButtonMemo = memo(function PlayButton({
                 size="small"
                 variant="contained"
                 startIcon={<PlayArrowRounded/>}
-                aria-describedby={playbackDescriptionId}
+                aria-label="Play vowel audio"
                 onClick={onPlayHandler}
                 // disabled={disabled}
             >
@@ -143,19 +157,12 @@ export const VowelActionControlsMemo = memo(function VowelActionControls({
         const disablePlay = !audioUrl;
         console.log('audioUrl', audioUrl);
 
-        const playbackDescriptionId = 'vowel-action-controls__playback-status';
-
         useEffect(() => {
             if (typeof window === 'undefined') {
                 return;
             }
 
             window.localStorage.setItem(playbackStorageKey, JSON.stringify(playbackSettings));
-        }, [playbackSettings]);
-
-        const playbackDescription = useMemo(() => {
-            const speedLabel = playbackSettings.speed === 'slow' ? 'Slow' : 'Normal';
-            return `Playback settings: speed ${speedLabel}, repeat ${playbackSettings.repeatCount}x.`;
         }, [playbackSettings]);
 
         // Use memo to pass a stable onPlay ref to PlayButtonMemo whilst pointing each new onPlayHandler to it;
@@ -171,8 +178,6 @@ export const VowelActionControlsMemo = memo(function VowelActionControls({
                         pointerEvents: disablePlay ? 'none' : 'auto',
                     }}
                 >
-                    <h3 className="visually-hidden">Play vowel audio</h3>
-
                     <WaveformScrubber
                         audioRef={audioRef}
                         audioUrl={audioUrl}
@@ -189,21 +194,16 @@ export const VowelActionControlsMemo = memo(function VowelActionControls({
 
                     {
                         <PlayButtonMemo
-                            playbackDescriptionId={playbackDescriptionId}
                             onPlayHandler={stableOnPlay}
                             // disabled={disablePlay}
                         />
                     }
 
                     <PlaybackSettingsPanelMemo
-                        settings={playbackSettings}
+                        playbackSettings={playbackSettings}
                         onSpeedChange={onSpeedChange}
                         onRepeatChange={onRepeatChange}
                     />
-
-                    <Typography id={playbackDescriptionId} className="visually-hidden">
-                        {playbackDescription}
-                    </Typography>
                 </Stack>
 
                 {disablePlay && (

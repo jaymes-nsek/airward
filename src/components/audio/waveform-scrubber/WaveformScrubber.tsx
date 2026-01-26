@@ -2,8 +2,9 @@ import './WaveformScrubber.scss'
 import {memo, type RefObject, useEffect, useMemo, useRef, useState} from 'react';
 import WaveSurfer from 'wavesurfer.js';
 import type {WaveSurferOptions} from 'wavesurfer.js';
-import {Box} from '@mui/material';
+import {Box, type BoxProps} from '@mui/material';
 import {useTheme} from '@mui/material/styles';
+import clsx from "clsx";
 
 const WAVEFORM_H = 44;
 const WAVEFORM_AND_TIME_H = 68;
@@ -50,19 +51,23 @@ function formatDurationHhMmSs(totalSec: number): {
 }
 
 
-type WaveformTimeProps = {
+type WaveformTimeProps = BoxProps & {
     a11yLabel: string;
 };
 
 const WaveformTimeMemo = memo(
     function WaveformTime({
                               a11yLabel,
+                              ...rest
                           }: WaveformTimeProps) {
         return (
             <Box
-                className="waveform-scrubber__waveform-time"
+                {...rest}
+                className={clsx('waveform-scrubber__waveform-time', rest.className)}
                 role="status"
                 aria-label="Duration of selected vowel audio"
+                aria-live="off"
+                aria-relevant={'all'}
                 aria-atomic="true"
             >
                 {a11yLabel}
@@ -187,13 +192,16 @@ export function WaveformScrubber({audioRef, audioUrl, disabled, showTime}: Wavef
             <Box
                 className="waveform-scrubber__waveform-canvas"
                 ref={containerRef}
-                aria-label="Audio waveform scrubber"
+                aria-hidden="true"
                 sx={{height: WAVEFORM_H}}
             />
 
-            {showTime && (
-                <WaveformTimeMemo a11yLabel={a11yLabel}/>
-            )}
+            {showTime &&
+                <WaveformTimeMemo
+                    className={'u--readonly'}
+                    a11yLabel={a11yLabel}
+                    aria-busy={!containerRef}/>
+            }
         </Box>
     );
 }

@@ -52,7 +52,7 @@ export interface VowelPlaybackProps extends VowelPlaybackBaseProps{
 }
 
 export interface PlaybackSettingsPanelProps {
-    settings: PlaybackSettings
+    playbackSettings: PlaybackSettings
     onSpeedChange: (event: SelectChangeEvent<PlaybackSettings['speed']>) => void
     onRepeatChange: (event: SelectChangeEvent<PlaybackSettings['repeatCount']>) => void
 }
