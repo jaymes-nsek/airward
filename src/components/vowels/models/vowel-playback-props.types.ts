@@ -2,8 +2,7 @@ import type {BoxProps, SelectChangeEvent} from '@mui/material'
 import type {RefObject} from 'react'
 import type {PlaybackSettings} from "./playback.types.ts";
 import type {VowelDetails} from "./vowel.types.ts";
-
-
+import type {LoadState} from "../../../app/shared/models/load-state.type.ts";
 
 export type VowelBaseProps = Omit<BoxProps, 'onSelect'> & {
     selectedVowel: VowelDetails | null;
@@ -16,9 +15,9 @@ export type VowelControlsProps = {
 }
 
 export type VowelListProps = Omit<BoxProps, 'onSelect'> & {
+    loadState: LoadState
     vowels: VowelDetails[]
     selectedIndex: number
-    isLoading: boolean
     onSelect: (index: number) => void
     onPlayHandler: () => void
 }

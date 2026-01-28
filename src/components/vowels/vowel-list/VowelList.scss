@@ -1,33 +1,27 @@
 @use '../../../app/styles/foundations/breakpoints' as *;
 
 .vowel-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
 
+  display: none;
+  gap: 12px;
 
-  &__grid-list {
-    display: none;
-    gap: 12px;
+  //region Override default ul margin and padding
+  margin: 0;
+  padding: 0;
+  //endregion
 
-    //region Override default ul margin and padding
-    margin: 0;
-    padding: 0;
-    //endregion
+  @include media-up(tablet) {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
+  }
 
-    @include media-up(tablet) {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
-    }
-
-    @include media-up(desktop) {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
-    }
+  @include media-up(desktop) {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
   }
 
   &__loading {
-    height: 240px;
+    height: 48px;
     width: 100%;
     z-index: 1;
   }

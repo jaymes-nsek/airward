@@ -1,4 +1,4 @@
-import {Box, type BoxProps, Button, Skeleton} from '@mui/material'
+import {Box, type BoxProps, Button, ListItem, ListItemButton, Skeleton} from '@mui/material'
 import ArrowBackIosNewRounded from '@mui/icons-material/ArrowBackIosNewRounded'
 import ArrowForwardIosRounded from '@mui/icons-material/ArrowForwardIosRounded'
 import './VowelList.scss'
@@ -7,7 +7,6 @@ import {getVowelOptionId} from "../../../app/shared/a11y/listboxIds.ts";
 import clsx from "clsx";
 import {type JSX, type KeyboardEventHandler} from "react";
 import type {VowelControlsProps, VowelListItemProps, VowelListProps} from "../models/vowel-playback-props.types.ts";
-import {VisibilityGate} from "../../visibility-gate/VisibilityGate.tsx";
 
 type VowelSmallWidthControlsProps = BoxProps & VowelControlsProps;
 
@@ -58,28 +57,29 @@ function VowelListItem({
     };
 
     return (
-        <Box
+        <ListItem
             component="li"
             role="none"
             className="vowel-list__item"
+            disablePadding
+            key={vowel.id}
         >
-            <Button
+            <ListItemButton
                 id={getVowelOptionId(vowel.id)}
                 role="option"
                 aria-selected={isSelected}
                 aria-label={vowel.name}
-                tabIndex={-1} // critical: only the listbox is tabbable
+                tabIndex={-1} // only the listbox itself is tabbable
                 className={clsx(
                     'vowel-list__item-button',
                     isActive && 'vowel-list__item-button--active',
                 )}
-                variant={isActive ? 'contained' : 'outlined'}
-                color={isActive ? 'primary' : 'inherit'}
+                selected={isSelected}
                 onClick={handleClick}
             >
                 {vowel.symbol}
-            </Button>
-        </Box>
+            </ListItemButton>
+        </ListItem>
     )
 }
 
@@ -89,14 +89,17 @@ VowelListItem.displayName = 'VowelListItem'
  * Intended for use for medium+ device width (note, this includes table in landscape orientation)
  */
 export function VowelList({
+                              loadState,
                               vowels,
                               selectedIndex,
-                              isLoading,
                               onSelect,
                               onPlayHandler,
                               ...rest
                           }: VowelListProps) {
-    const count = vowels.length
+    const isLoading = loadState.status === 'loading';
+    const isError = loadState.status === 'error';
+
+    const count = vowels.length;
 
     const {safeSelectedIndex, onKeyDown} = useListboxNavigation({
         count,
@@ -104,16 +107,16 @@ export function VowelList({
         onSelect,
         wrap: true,
         confirmOnSpaceEnter: false, // handle Enter/Space explicitly here
-    })
+    });
 
     const activeDescendant =
-        safeSelectedIndex >= 0 ? getVowelOptionId(vowels[safeSelectedIndex].id) : undefined
+        safeSelectedIndex >= 0 ? getVowelOptionId(vowels[safeSelectedIndex].id) : undefined;
 
     const keyDownHandler: KeyboardEventHandler<HTMLDivElement> = (e) => {
         // Let the navigation hook handle arrows/home/end etc.
         onKeyDown(e as never);
 
-        if (count === 0) {
+        if (isLoading || isError || count === 0) {
             return;
         }
 
@@ -135,27 +138,42 @@ export function VowelList({
 
     return (
         <>
-            {isLoading && (
-                <Skeleton
-                    className="vowel-list__loading"
-                    variant="rectangular"
-                    aria-hidden="true"
-                />
-            )}
-
-            <VisibilityGate hidden={isLoading} className="vowel-list">
-                <Box
-                    component="ul"
-                    role="listbox"
-                    tabIndex={0}
-                    aria-label="Vowel library"
-                    aria-activedescendant={activeDescendant}
-                    aria-busy={isLoading || undefined}
-                    onKeyDown={keyDownHandler}
-                    {...rest}
-                    className={clsx('vowel-list__grid-list', rest.className)}
-                >
-                    {vowels.map((vowel, index) => (
+            {/*className="vowel-list"*/}
+            <Box
+                component="ul"
+                role="listbox"
+                tabIndex={0}
+                aria-label="Vowel library"
+                aria-activedescendant={activeDescendant}
+                onKeyDown={keyDownHandler}
+                {...rest}
+                aria-busy={isLoading || undefined}
+                aria-disabled={(isLoading || isError) || undefined}
+                className={clsx('vowel-list', rest.className)}
+                sx={{
+                    ...(rest.sx as object),
+                    pointerEvents: (isLoading || isError) ? 'none' : 'auto',
+                }}
+            >
+                {isLoading ? (
+                    Array.from({length: 20}).map((_, i) => (
+                        <ListItem
+                            key={`vowel-skeleton-${i}`}
+                            component="li"
+                            role="none"
+                            className="vowel-list__item"
+                            disablePadding
+                        >
+                            {/* role="presentation" so SRs don’t treat this like a meaningful control */}
+                            <Skeleton
+                                className="vowel-list__loading"
+                                variant="rectangular"
+                                role="presentation"
+                            />
+                        </ListItem>
+                    ))
+                ) : (
+                    vowels.map((vowel, index) => (
                         <VowelListItem
                             key={vowel.id}
                             vowel={vowel}
@@ -165,10 +183,9 @@ export function VowelList({
                             onSelect={onSelect}
                             onPlayHandler={onPlayHandler}
                         />
-                    ))}
-
-                </Box>
-            </VisibilityGate>
+                    ))
+                )}
+            </Box>
         </>
-    )
+    );
 }
