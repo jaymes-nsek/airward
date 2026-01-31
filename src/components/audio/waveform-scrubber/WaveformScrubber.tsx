@@ -10,6 +10,16 @@ const WAVEFORM_H = 44;
 const WAVEFORM_AND_TIME_H = 68;
 
 
+type FormattedDuration = {
+    digitalTime: string;
+    allyTime: string;
+}
+
+const DEFAULT_FORMATTED_DURATION = {
+    digitalTime: '00:00:00',
+    allyTime: '0 seconds',
+};
+
 /**
  * Formats a duration for visual display and accessibility.
  *
@@ -22,17 +32,11 @@ const WAVEFORM_AND_TIME_H = 68;
  *
  * @param totalSec Duration in seconds.
  */
-function formatDurationHhMmSs(totalSec: number): {
-    display: string;
-    a11yLabel: string;
-} {
-    console.log('formatDuration', totalSec);
+function formatDurationHhMmSs(totalSec: number): FormattedDuration {
+    // console.log('formatDuration', totalSec);
 
     if (!Number.isFinite(totalSec)) {
-        return {
-            display: '00:00:00',
-            a11yLabel: '0 seconds',
-        };
+        return DEFAULT_FORMATTED_DURATION;
     }
 
     const clamped = Math.max(0, totalSec);
@@ -45,19 +49,19 @@ function formatDurationHhMmSs(totalSec: number): {
     const s = wholeSeconds % 60;
 
     return {
-        display: `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`,
-        a11yLabel: `${a11ySeconds.toFixed(2)} seconds`,
+        digitalTime: `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`,
+        allyTime: `${a11ySeconds.toFixed(2)} seconds`,
     };
 }
 
 
 type WaveformTimeProps = BoxProps & {
-    a11yLabel: string;
+    timeContent: string;
 };
 
 const WaveformTimeMemo = memo(
     function WaveformTime({
-                              a11yLabel,
+                              timeContent,
                               ...rest
                           }: WaveformTimeProps) {
         return (
@@ -70,11 +74,11 @@ const WaveformTimeMemo = memo(
                 aria-relevant={'all'}
                 aria-atomic="true"
             >
-                {a11yLabel}
+                {timeContent}
             </Box>
         );
     },
-    (prevProps, nextProps) => prevProps.a11yLabel === nextProps.a11yLabel
+    (prevProps, nextProps) => prevProps.timeContent === nextProps.timeContent
 );
 
 
@@ -94,13 +98,10 @@ export function WaveformScrubber({audioRef, audioUrl, disabled, showTime}: Wavef
     const [duration, setDuration] = useState(0);
     const theme = useTheme();
 
-    const {a11yLabel} = useMemo(() => {
+    const {allyTime} = useMemo(() => {
         // When no audio is selected, display 0:00 without mutating state in an effect.
         if (!audioUrl) {
-            return {
-                display: '00:00:00',
-                a11yLabel: '0 seconds',
-            };
+            return DEFAULT_FORMATTED_DURATION;
         }
 
         return formatDurationHhMmSs(duration);
@@ -199,7 +200,7 @@ export function WaveformScrubber({audioRef, audioUrl, disabled, showTime}: Wavef
             {showTime &&
                 <WaveformTimeMemo
                     className={'u--readonly'}
-                    a11yLabel={a11yLabel}
+                    timeContent={allyTime}
                     aria-busy={!containerRef}/>
             }
         </Box>

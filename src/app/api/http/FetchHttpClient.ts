@@ -15,7 +15,10 @@ export class FetchHttpClient implements HttpClient {
     }
 
     private toUrl(path: string): string {
-        if (!path.startsWith("/")) throw new Error(`Path must start with "/": got "${path}"`);
+        if (!path.startsWith("/")) {
+            throw new Error(`Path must start with "/": got "${path}"`);
+        }
+
         return `${this.baseUrl}${path}`;
     }
 
@@ -70,7 +73,7 @@ export class FetchHttpClient implements HttpClient {
      * - parse body via caller-supplied parser
      */
     private get<T>(path: string, init: RequestInit, parseBody: BodyParser<T>): Observable<T> {
-        return fromFetch(this.toUrl(path), { ...init }).pipe(
+        return fromFetch(this.toUrl(path), {...init}).pipe(
             switchMap((res) => {
                 if (!res.ok) {
                     return this.mapFailureOrGeneric(path, res);
@@ -119,13 +122,21 @@ export class FetchHttpClient implements HttpClient {
     }
 
     private tryParseApiFailure(payload: unknown): ApiError | null {
-        if (!payload || typeof payload !== "object") return null;
+        if (!payload || typeof payload !== "object") {
+            return null;
+        }
 
         const maybe = payload as { success?: unknown };
-        if (maybe.success !== false) return null;
+
+        if (maybe.success !== false) {
+            return null;
+        }
 
         const failure = payload as ApiError;
-        if (!failure.error?.code || !failure.error?.message) return null;
+
+        if (!failure.error?.code || !failure.error?.message) {
+            return null;
+        }
 
         return failure;
     }

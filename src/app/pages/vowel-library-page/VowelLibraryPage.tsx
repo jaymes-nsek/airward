@@ -4,7 +4,7 @@ import {vowelLibraryService} from '../../../services/VowelLibraryService.ts'
 import {VowelDetailsCard} from '../../../components/vowels/vowel-details/vowel-details-card/VowelDetailsCard.tsx'
 import {VowelList, VowelSmallWidthControls} from '../../../components/vowels/vowel-list/VowelList.tsx'
 import './VowelLibraryPage.scss'
-import {Subscription} from "rxjs";
+import {defer, Subscription} from "rxjs";
 import type {VowelLibraryState} from "./vowel-library.types.ts";
 import {useGetVowelAudio} from "../../../components/vowels/vowel-details/hooks/useGetVowelAudio.ts";
 import {useVowelAudioPlayback} from "../../../components/vowels/vowel-details/hooks/useVowelAudioPlayback.ts";
@@ -16,6 +16,7 @@ import type {PlaybackSettings} from "../../../components/vowels/models/playback.
 import type {VowelDetails} from "../../../components/vowels/models/vowel.types.ts";
 import {getVowelFromIndex} from "../../shared/utils/vowel-details.utils.ts";
 import type {LoadState} from "../../shared/models/load-state.type.ts";
+import {withDelayedLoading} from "../../shared/custom-rxjs/operators/withDelayedLoading.ts";
 
 const defaultPlaybackSettings: PlaybackSettings = {
     speed: 'normal',
@@ -51,7 +52,7 @@ function getStoredPlaybackSettings(): PlaybackSettings {
 
 export function VowelLibraryPage() {
     const [vowelLibState, setVowelLibState] = useState<VowelLibraryState>({vowels: [], selectedIndex: 0});
-    const [loadState, setLoadState] = useState<LoadState>({status: 'loading'});
+    const [loadState, setLoadState] = useState<LoadState>({status: 'idle'});
     const [playbackSettings, setPlaybackSettings] = useState<PlaybackSettings>(() => getStoredPlaybackSettings());
 
     // Derive the selected vowel strictly from "presence of vowels"
@@ -63,42 +64,37 @@ export function VowelLibraryPage() {
     const {audioRef, onPlayHandler} = useVowelAudioPlayback(selectedVowel, audioUrl, playbackSettings);
 
     const subscriptionRef = useRef<Subscription | null>(null);
+    const MIN_SHOW_MS = 300;
 
-    const subscribeToVowels = useCallback(() => {
+    const subscribeToVowels = useCallback((delayMs: number) => {
         subscriptionRef.current?.unsubscribe();
         subscriptionRef.current = null;
 
-        subscriptionRef.current = vowelLibraryService
-            .getVowelList()
-            .subscribe({
-                next: (response) => {
-                    const vowels: VowelDetails[] = response.data.items ?? [];
+        const request$ = defer(() => vowelLibraryService.getVowelList());
 
-                    console.log('VowelLibraryPage finished...', 'first item is:', vowels[0]);
+        subscriptionRef.current = withDelayedLoading(request$, {
+            delayMs,
+            minShowMs: MIN_SHOW_MS,
+            onShowLoading: () => setLoadState({ status: 'loading' }),
+        }).subscribe({
+            next: (response) => {
+                const vowels: VowelDetails[] = response.data.items ?? [];
+                setVowelLibState({ vowels, selectedIndex: 0 });
+                setLoadState({ status: 'success' });
+            },
+            error: (err) => {
+                const message =
+                    err instanceof Error ? err.message : 'Couldn’t load vowel library. Please try again.';
 
-                    setVowelLibState({vowels, selectedIndex: 0});
-                    setLoadState({status: 'success'});
-                },
-                error: (err) => {
-                    console.error('Failed to load vowel library', err);
-
-                    const message =
-                        err instanceof Error
-                            ? err.message
-                            : 'Couldn’t load vowel library. Please try again.';
-
-                    setVowelLibState({vowels: [], selectedIndex: 0});
-                    setLoadState({status: 'error', errorMessage: message});
-                },
-            });
+                setVowelLibState({ vowels: [], selectedIndex: 0 });
+                setLoadState({ status: 'error', errorMessage: message });
+            },
+        });
     }, []);
 
     useEffect(() => {
-        // console.log('effect mount');
-
-        // IMPORTANT: no synchronous setState calls in the effect body.
-        // Initial loadState is already {status:'loading'}.
-        subscribeToVowels();
+        // Initial loadState is already {status:'idle'}; delayed commiting to loading by 100ms to avoid flicker;
+        subscribeToVowels(100);
 
         return () => {
             subscriptionRef.current?.unsubscribe();
@@ -174,8 +170,8 @@ export function VowelLibraryPage() {
     };
 
     const handleRetry = () => {
-        setLoadState({status: 'loading'});
-        subscribeToVowels();
+        // Do not setLoadState manually; let the controller do it (delay 0 => immediate).
+        subscribeToVowels(0);
     };
 
     return (
@@ -183,6 +179,8 @@ export function VowelLibraryPage() {
             <Box component="section" className="vowel-library-page__list">
                 <h2 id="vowel-list-heading" className="visually-hidden">Interactive vowel list with audio playback</h2>
 
+                {/*NOTE: Predicator is intentionally not used to conditionally render Alert or VowelList,
+                so VowelList remains in the DOM for a11y.*/}
                 {loadState.status === 'error' && (
                     <Alert
                         className={'vowel-library-page__alert'}
