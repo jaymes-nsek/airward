@@ -29,6 +29,7 @@ const playbackSpeedOptions: Array<{ value: PlaybackSettings['speed']; label: str
 ];
 
 const playbackDescriptionId = 'vowel-action-controls__playback-status';
+const TIMES = '\u00D7';
 
 function PlaybackSettingsPanel({
                                    playbackSettings,
@@ -62,7 +63,6 @@ function PlaybackSettingsPanel({
                     <Select
                         labelId="vowel-details-playback-speed-label"
                         value={playbackSettings.speed}
-                        label="Speed"
                         inputProps={{'aria-label': 'Playback speed'}}
                         onChange={onSpeedChange}
                     >
@@ -70,7 +70,6 @@ function PlaybackSettingsPanel({
                             <MenuItem
                                 key={option.value}
                                 value={option.value}
-                                aria-label={`Speed: ${option.label}${playbackSettings.speed === option.value ? ', selected' : ''}`}
                             >
                                 <ListItemText primary={option.label}/>
                             </MenuItem>
@@ -88,7 +87,6 @@ function PlaybackSettingsPanel({
                     <Select
                         labelId="vowel-details-playback-repeat-label"
                         value={playbackSettings.repeatCount}
-                        label="Repeat"
                         inputProps={{'aria-label': 'Repeat playback count'}}
                         onChange={onRepeatChange}
                     >
@@ -96,9 +94,8 @@ function PlaybackSettingsPanel({
                             <MenuItem
                                 key={count}
                                 value={count}
-                                aria-label={`Repeat playback count: ${count}${playbackSettings.repeatCount === count ? ', selected' : ''}`}
                             >
-                                <ListItemText primary={`${count}x`}/>
+                                <ListItemText primary={`${count}${TIMES}`}/>
                             </MenuItem>
                         ))}
                     </Select>
