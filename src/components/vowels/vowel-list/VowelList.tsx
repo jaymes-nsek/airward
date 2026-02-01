@@ -101,8 +101,11 @@ export function VowelList({
                               onPlayHandler,
                               ...rest
                           }: VowelListProps) {
-    const isLoading = loadState.status === 'loading';
-    const isError = loadState.status === 'error';
+    const view = {
+        isLoading: loadState.status === 'loading',
+        isError: loadState.status === 'error',
+        // errorMessage: loadState.status === 'error' ? loadState.errorMessage : undefined,
+    };
 
     const count = vowels.length;
 
@@ -121,7 +124,7 @@ export function VowelList({
         // Let the navigation hook handle arrows/home/end etc.
         onKeyDown(e as never);
 
-        if (isLoading || isError || count === 0) {
+        if (view.isLoading || view.isError || count === 0) {
             return;
         }
 
@@ -142,7 +145,7 @@ export function VowelList({
     };
 
     const ITEM_COUNT_LOADING = 20;
-    const itemCount = isLoading ? ITEM_COUNT_LOADING : vowels.length;
+    const itemCount = view.isLoading ? ITEM_COUNT_LOADING : vowels.length;
 
     return (
         <>
@@ -155,16 +158,16 @@ export function VowelList({
                 aria-activedescendant={activeDescendant}
                 onKeyDown={keyDownHandler}
                 {...rest}
-                aria-busy={isLoading || undefined}
-                aria-disabled={(isLoading || isError) || undefined}
+                aria-busy={view.isLoading || undefined}
+                aria-disabled={(view.isLoading || view.isError) || undefined}
                 className={clsx('vowel-list', rest.className)}
                 sx={{
                     ...(rest.sx as object),
-                    pointerEvents: (isLoading || isError) ? 'none' : 'auto',
+                    pointerEvents: (view.isLoading || view.isError) ? 'none' : 'auto',
                 }}
             >
                 {Array.from({length: itemCount}).map((_, index) => {
-                    if (isLoading) {
+                    if (view.isLoading) {
                         return (
                             <VowelListItem
                                 key={`vowel-loading-${index}`}
