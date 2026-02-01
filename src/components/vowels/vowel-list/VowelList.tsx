@@ -6,7 +6,12 @@ import {useListboxNavigation} from "../../../app/shared/a11y/useListboxNavigatio
 import {getVowelOptionId} from "../../../app/shared/a11y/listboxIds.ts";
 import clsx from "clsx";
 import {type JSX, type KeyboardEventHandler} from "react";
-import type {VowelControlsProps, VowelListItemProps, VowelListProps} from "../models/vowel-playback-props.types.ts";
+import type {
+    VowelControlsProps,
+    VowelListItemLoadingProps,
+    VowelListItemProps,
+    VowelListProps
+} from "../models/vowel-playback-props.types.ts";
 
 type VowelSmallWidthControlsProps = BoxProps & VowelControlsProps;
 
@@ -43,42 +48,42 @@ export function VowelSmallWidthControls({
     )
 }
 
-function VowelListItem({
-                           vowel,
-                           index,
-                           isSelected,
-                           isActive,
-                           onSelect,
-                           onPlayHandler
-                       }: VowelListItemProps): JSX.Element {
-    const handleClick = () => {
-        onSelect(index);
-        onPlayHandler(); // pointer activation: select + play
-    };
-
+function VowelListItem(props: VowelListItemProps | VowelListItemLoadingProps): JSX.Element {
     return (
         <ListItem
             component="li"
             role="none"
             className="vowel-list__item"
             disablePadding
-            key={vowel.id}
         >
-            <ListItemButton
-                id={getVowelOptionId(vowel.id)}
-                role="option"
-                aria-selected={isSelected}
-                aria-label={vowel.name}
-                tabIndex={-1} // only the listbox itself is tabbable
-                className={clsx(
-                    'vowel-list__item-button',
-                    isActive && 'vowel-list__item-button--active',
-                )}
-                selected={isSelected}
-                onClick={handleClick}
-            >
-                {vowel.symbol}
-            </ListItemButton>
+            {props.variant === 'loading' ? (
+                <Skeleton
+                    className="vowel-list__loading"
+                    variant="rectangular"
+                    role="presentation"
+                    aria-hidden={true}
+                />
+            ) : (
+                <ListItemButton
+                    id={getVowelOptionId(props.vowel.id)}
+                    role="option"
+                    aria-selected={props.isSelected}
+                    aria-label={props.vowel.name}
+                    tabIndex={-1}
+                    className={clsx(
+                        'vowel-list__item-button',
+                        props.isActive && 'vowel-list__item-button--active',
+                    )}
+                    selected={props.isSelected} // aria-selected tracks committed selection
+                    // isActive={props.isActive} // isActive tracks roving highlight
+                    onClick={() => {
+                        props.onSelect(props.index);
+                        props.onPlayHandler(); // pointer activation: select + play
+                    }}
+                >
+                    {props.vowel.symbol}
+                </ListItemButton>
+            )}
         </ListItem>
     )
 }
@@ -136,6 +141,9 @@ export function VowelList({
         }
     };
 
+    const ITEM_COUNT_LOADING = 20;
+    const itemCount = isLoading ? ITEM_COUNT_LOADING : vowels.length;
+
     return (
         <>
             {/*className="vowel-list"*/}
@@ -155,36 +163,32 @@ export function VowelList({
                     pointerEvents: (isLoading || isError) ? 'none' : 'auto',
                 }}
             >
-                {isLoading ? (
-                    Array.from({length: 20}).map((_, i) => (
-                        <ListItem
-                            key={`vowel-skeleton-${i}`}
-                            component="li"
-                            role="none"
-                            className="vowel-list__item"
-                            disablePadding
-                        >
-                            {/* role="presentation" so SRs don’t treat this like a meaningful control */}
-                            <Skeleton
-                                className="vowel-list__loading"
-                                variant="rectangular"
-                                role="presentation"
+                {Array.from({length: itemCount}).map((_, index) => {
+                    if (isLoading) {
+                        return (
+                            <VowelListItem
+                                key={`vowel-loading-${index}`}
+                                variant="loading"
+                                index={index}
                             />
-                        </ListItem>
-                    ))
-                ) : (
-                    vowels.map((vowel, index) => (
+                        )
+                    }
+
+                    const vowel = vowels[index];
+
+                    return (
                         <VowelListItem
                             key={vowel.id}
+                            variant="loaded"
                             vowel={vowel}
                             index={index}
-                            isSelected={index === selectedIndex} // aria-selected tracks committed selection
-                            isActive={index === safeSelectedIndex} // isActive tracks roving highlight
+                            isSelected={index === selectedIndex}
+                            isActive={index === safeSelectedIndex}
                             onSelect={onSelect}
                             onPlayHandler={onPlayHandler}
                         />
-                    ))
-                )}
+                    );
+                })}
             </Box>
         </>
     );

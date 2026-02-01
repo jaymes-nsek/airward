@@ -22,7 +22,13 @@ export type VowelListProps = Omit<BoxProps, 'onSelect'> & {
     onPlayHandler: () => void
 }
 
+export interface VowelListItemLoadingProps {
+    variant: 'loading'
+    index: number
+}
+
 export interface VowelListItemProps {
+    variant: 'loaded'
     vowel: VowelDetails
     index: number
     isSelected: boolean // What is actually selected
