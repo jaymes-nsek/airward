@@ -1,4 +1,5 @@
 import { createTheme } from '@mui/material/styles';
+import {alpha} from "@mui/material";
 
 export const theme = createTheme({
     palette: {
@@ -99,7 +100,46 @@ export const theme = createTheme({
                 }),
             },
         },
+
+        MuiListItemButton: {
+            styleOverrides: {
+                // NB: When access to theme.palette is sorted, styleOverrides.root must be a function:
+                root: ({ theme }) => ({
+                    // 1) Hover underline for ALL items (selected or not)
+                    '&:hover': {
+                        backgroundColor: alpha(theme.palette.secondary.main, 0.2),
+                        textDecoration: 'underline',
+                        textDecorationThickness: '2px',
+                        textUnderlineOffset: '3px',
+                    },
+
+                    // 2) Selected styling (keeps underline too)
+                    '&.Mui-selected': {
+                        backgroundColor: alpha(theme.palette.secondary.main, 0.4),
+                        textDecoration: 'underline',
+                        textDecorationThickness: '2px',
+                        textUnderlineOffset: '3px',
+                    },
+
+                    // 3) Selected + hover
+                    '&.Mui-selected:hover': {
+                        backgroundColor: alpha(theme.palette.secondary.main, 0.2),
+                    },
+
+                    // 4) Keyboard focus visibility for ALL items
+                    '&.Mui-focusVisible': {
+                        outline: `2px solid ${alpha(theme.palette.secondary.main, 0.6)}`,
+                        outlineOffset: 2,
+                        // Optional: also underline on focus, for parity with hover
+                        textDecoration: 'underline',
+                        textDecorationThickness: '2px',
+                        textUnderlineOffset: '3px',
+                    },
+                }),
+            },
+        },
     },
+
 
     typography: {
         h2: {

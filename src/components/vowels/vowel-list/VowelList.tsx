@@ -75,7 +75,6 @@ function VowelListItem(props: VowelListItemProps | VowelListItemLoadingProps): J
                         props.isActive && 'vowel-list__item-button--active',
                     )}
                     selected={props.isSelected} // aria-selected tracks committed selection
-                    // isActive={props.isActive} // isActive tracks roving highlight
                     onClick={() => {
                         props.onSelect(props.index);
                         props.onPlayHandler(); // pointer activation: select + play
